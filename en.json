@@ -90,6 +90,54 @@
       }
     ]
   },
+  "memorabiliaPage": {
+    "title": "Memorabilia",
+    "subtitle": "Own a piece of the game. Authentic, game-worn, and signed history.",
+    "inventory": [
+      {
+        "id": "mem_001",
+        "title": "1982 Championship Net Fragment",
+        "price": "1,200.00",
+        "type": "RELIC",
+        "color": "blue"
+      },
+      {
+        "id": "mem_002",
+        "title": "Signed '93 Game Ball",
+        "price": "850.00",
+        "type": "AUTO",
+        "color": "gold"
+      },
+      {
+        "id": "mem_003",
+        "title": "Practice Worn Warmup Jersey",
+        "price": "350.00",
+        "type": "GAME-WORN",
+        "color": "blue"
+      },
+      {
+        "id": "mem_004",
+        "title": "Framed Stadium Panorama (Signed)",
+        "price": "225.00",
+        "type": "ART",
+        "color": "navy"
+      },
+      {
+        "id": "mem_005",
+        "title": "Coach Smith Commemorative Plaque",
+        "price": "175.00",
+        "type": "DECOR",
+        "color": "gold"
+      },
+      {
+        "id": "mem_006",
+        "title": "Final Four Ticket Stub 2017",
+        "price": "95.00",
+        "type": "TICKET",
+        "color": "blue"
+      }
+    ]
+  },
   "about": {
     "initials": "CM",
     "sectionTitle": "Preserving History.",

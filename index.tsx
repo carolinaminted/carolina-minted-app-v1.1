@@ -218,7 +218,6 @@ const Header = ({ onNavigate }) => {
   const handleNavClick = (id) => {
     onNavigate(id);
     setIsOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -266,32 +265,35 @@ const Header = ({ onNavigate }) => {
           {navItems.map((item) => (
             <button 
               key={item.id} 
+              type="button"
               onClick={() => handleNavClick(item.id)}
               style={{ background: 'none', border: 'none', cursor: 'pointer', textDecoration: "none", color: COLORS.navy, fontWeight: "500", fontSize: "0.95rem", fontFamily: 'inherit' }}>
               {item.label}
             </button>
           ))}
           <button 
+            type="button"
             onClick={() => handleNavClick('contact')}
             style={{ 
               background: COLORS.navy, 
               border: "none", 
               cursor: "pointer", 
               color: "white", 
-              padding: "8px 16px",
+              padding: "8px 16px", 
               borderRadius: "4px",
               fontWeight: "600",
               fontSize: "0.9rem"
             }}>
             {content.nav.contact}
           </button>
-          <button style={{ background: "none", border: "none", cursor: "pointer", color: COLORS.navy }}>
+          <button type="button" style={{ background: "none", border: "none", cursor: "pointer", color: COLORS.navy }}>
             <Icons.ShoppingBag />
           </button>
         </nav>
 
         {/* Mobile Menu Toggle */}
         <button 
+          type="button"
           className="mobile-toggle"
           onClick={() => setIsOpen(!isOpen)} 
           style={{ display: "none", background: "none", border: "none", color: COLORS.navy, cursor: "pointer" }}
@@ -317,6 +319,7 @@ const Header = ({ onNavigate }) => {
           {navItems.map((item) => (
             <button 
               key={item.id} 
+              type="button"
               onClick={() => handleNavClick(item.id)}
               style={{ background: 'none', border: 'none', textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "1.1rem", textAlign: "center", fontFamily: 'inherit' }}
             >
@@ -324,6 +327,7 @@ const Header = ({ onNavigate }) => {
             </button>
           ))}
            <button 
+              type="button"
               onClick={() => handleNavClick('contact')}
               style={{ background: 'none', border: 'none', textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "1.1rem", textAlign: "center", fontFamily: 'inherit' }}
             >
@@ -371,7 +375,7 @@ const Hero = ({ onShopClick, onCommunityClick }) => {
             borderRadius: "50px", 
             fontSize: "0.875rem", 
             fontWeight: "600", 
-            marginBottom: "24px",
+            marginBottom: "24px", 
             border: `1px solid rgba(19, 41, 75, 0.1)`
           }}>
             {content.hero.est}
@@ -391,11 +395,13 @@ const Hero = ({ onShopClick, onCommunityClick }) => {
           </p>
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
             <button 
+              type="button"
               onClick={onShopClick}
               style={{...styles.button.primary, boxShadow: "0 10px 20px rgba(19, 41, 75, 0.2)"}}>
               {content.hero.ctaPrimary}
             </button>
             <button 
+              type="button"
               onClick={onCommunityClick}
               style={styles.button.outline}>
               {content.hero.ctaSecondary}
@@ -560,6 +566,7 @@ const ShopSection = ({ onNavigate }) => {
         
         <div style={{ textAlign: 'center', marginTop: '60px' }}>
             <button 
+              type="button"
               onClick={() => onNavigate('shop')}
               style={{...styles.button.outline, padding: "16px 48px"}}
             >
@@ -853,6 +860,41 @@ const ShopPage = () => {
   );
 };
 
+const MemorabiliaPage = () => {
+  const content = useContent();
+  const page = content.memorabiliaPage;
+
+  return (
+    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+      <div style={{ backgroundColor: COLORS.navy, padding: '80px 0', color: COLORS.white, marginBottom: '60px', position: 'relative' }}>
+         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
+         <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
+            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '16px' }}>{page.title}</h1>
+            <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue }}>{page.subtitle}</p>
+         </div>
+      </div>
+
+      <div style={{ ...styles.container, paddingBottom: '80px' }}>
+        <div style={{ 
+          display: "grid", 
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+          gap: "32px" 
+        }}>
+          {page.inventory.map((item) => (
+             <ProductCard 
+                key={item.id}
+                title={item.title} 
+                price={item.price} 
+                type={item.type} 
+                color={item.color} 
+             />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ContactPage = () => {
   const content = useContent();
   const page = content.contactPage;
@@ -978,9 +1020,27 @@ const Footer = ({ onNavigate }) => {
 
   const handleLinkClick = (e, linkText) => {
     e.preventDefault();
-    if (linkText === "Contact Us") {
-      onNavigate('contact');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    switch (linkText) {
+      case "New Arrivals":
+      case "Best Sellers":
+      case "Graded Cards":
+        onNavigate('shop');
+        break;
+      case "Memorabilia":
+        onNavigate('memorabilia');
+        break;
+      case "FAQ":
+      case "Shipping & Returns":
+      case "Contact Us":
+        onNavigate('contact');
+        break;
+      case "Authenticity Guarantee":
+        onNavigate('about');
+        break;
+      default:
+        // Optionally handle unknown links or just do nothing
+        console.warn(`No route defined for footer link: ${linkText}`);
+        break;
     }
   };
 
@@ -996,7 +1056,7 @@ const Footer = ({ onNavigate }) => {
             <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>{content.footer.shopColumn.title}</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
               {content.footer.shopColumn.links.map((link, i) => (
-                <li key={i}><a href="#" style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
+                <li key={i}><a href="#" onClick={(e) => handleLinkClick(e, link)} style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
               ))}
             </ul>
           </div>
@@ -1044,6 +1104,18 @@ const App = () => {
       });
   }, []);
 
+  // NEW: Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
+  const handleNavigation = (page) => {
+    if (currentPage === page) {
+      window.scrollTo(0, 0);
+    }
+    setCurrentPage(page);
+  };
+
   if (isLoading) {
     return (
       <div className="loading-container">
@@ -1058,6 +1130,8 @@ const App = () => {
     switch (currentPage) {
       case 'shop':
         return <ShopPage />;
+      case 'memorabilia':
+        return <MemorabiliaPage />;
       case 'about':
         return <AboutPage />;
       case 'contact':
@@ -1069,20 +1143,11 @@ const App = () => {
         return (
           <>
             <Hero 
-              onShopClick={() => {
-                setCurrentPage('shop');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }} 
-              onCommunityClick={() => {
-                setCurrentPage('community');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
+              onShopClick={() => handleNavigation('shop')} 
+              onCommunityClick={() => handleNavigation('community')}
             />
             <Features />
-            <ShopSection onNavigate={(page) => {
-              setCurrentPage(page);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} />
+            <ShopSection onNavigate={handleNavigation} />
             <AboutSection />
           </>
         );
@@ -1092,12 +1157,12 @@ const App = () => {
   return (
     <ContentContext.Provider value={content}>
       <style>{styles.global}</style>
-      <Header onNavigate={setCurrentPage} />
+      <Header onNavigate={handleNavigation} />
       <main>
         {renderPage()}
         <Newsletter />
       </main>
-      <Footer onNavigate={setCurrentPage} />
+      <Footer onNavigate={handleNavigation} />
     </ContentContext.Provider>
   );
 };
