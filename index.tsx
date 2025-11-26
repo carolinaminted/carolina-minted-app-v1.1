@@ -316,13 +316,9 @@ const styles = {
         border-left: none !important;
         border-top: 4px solid ${COLORS.carolinaBlue};
       }
+      
       .why-choose-us-item {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .why-choose-us-item svg {
-        margin-bottom: 8px;
+        /* Removed column flex direction to fix alignment issues */
       }
 
       /* Footer Mobile Styles */
@@ -1018,9 +1014,28 @@ const AboutPage = () => {
              <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '30px' }}>{page.whyChooseUsTitle}</h2>
              <div style={{ display: 'grid', gap: '16px' }}>
                {page.whyChooseUsList.map((item, idx) => (
-                 <div key={idx} className="why-choose-us-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                   <div style={{ flexShrink: 0, marginTop: '4px' }}><Icons.Check /></div>
-                   <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#374151', margin: 0 }}>{item}</p>
+                 <div key={idx} className="why-choose-us-item" style={{ 
+                   display: 'flex', 
+                   alignItems: 'flex-start', 
+                   gap: '16px',
+                   backgroundColor: COLORS.white,
+                   padding: '24px',
+                   borderRadius: '12px',
+                   border: `1px solid ${COLORS.lightGray}`,
+                   boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
+                 }}>
+                   <div style={{ 
+                     flexShrink: 0, 
+                     backgroundColor: 'rgba(123, 175, 212, 0.15)',
+                     borderRadius: '50%',
+                     padding: '8px',
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center'
+                   }}>
+                    <Icons.Check />
+                   </div>
+                   <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#374151', margin: 0, textAlign: 'left' }}>{item}</p>
                  </div>
                ))}
              </div>
