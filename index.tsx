@@ -436,7 +436,7 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
           style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
         >
           <img 
-            src="./Charquaza.png" 
+            src="https://raw.githubusercontent.com/carolinaminted/carolina-minted-web-app/main/Charquaza.png" 
             alt="Carolina Minted Logo" 
             style={{ 
               height: '60px', 
