@@ -12,7 +12,7 @@
     "contact": "Contact"
   },
   "hero": {
-    "est": "Est. 2024 • Chapel Hill, NC",
+    "est": "Est. 2025 • Chapel Hill, NC",
     "headlineStart": "Collectibles",
     "headlineHighlight": "Born & Bred.",
     "subtext": "Premium trading cards, memorabilia, and exclusive drops for the true fan. Certified authentic, delivered with Southern hospitality.",
@@ -119,6 +119,19 @@
       ]
     }
   },
+  "contactPage": {
+    "title": "Contact Us",
+    "subtitle": "Have a question about a drop or need valuation advice? Send us a message.",
+    "emailLabel": "Email Support",
+    "emailValue": "carolinaminted@gmail.com",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Send Message"
+    }
+  },
   "newsletter": {
     "title": "Don't Miss the Next Drop",
     "text": "Join the VIP list for early access to new arrivals and exclusive discounts.",
@@ -138,6 +151,6 @@
       "title": "Support",
       "links": ["FAQ", "Shipping & Returns", "Authenticity Guarantee", "Contact Us"]
     },
-    "copyright": "© 2024 Carolina Minted Collectibles, LLC. All rights reserved."
+    "copyright": "© 2025 Carolina Minted Collectibles, LLC. All rights reserved."
   }
 }

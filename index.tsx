@@ -34,6 +34,9 @@ const Icons = {
   Check: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={COLORS.carolinaBlue} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
   ),
+  Mail: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+  ),
 };
 
 const getIconByName = (name) => {
@@ -106,6 +109,28 @@ const styles = {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid ${COLORS.lightGray};
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .input-field:focus {
+      border-color: ${COLORS.carolinaBlue};
+      box-shadow: 0 0 0 3px rgba(123, 175, 212, 0.2);
+    }
+    .label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: ${COLORS.navy};
+      margin-bottom: 6px;
+    }
   `,
   container: {
     maxWidth: "1200px",
@@ -126,6 +151,7 @@ const styles = {
       display: "inline-flex",
       alignItems: "center",
       gap: "8px",
+      justifyContent: "center",
     },
     outline: {
       backgroundColor: "transparent",
@@ -229,6 +255,20 @@ const Header = ({ onNavigate }) => {
               {item.label}
             </button>
           ))}
+          <button 
+            onClick={() => handleNavClick('contact')}
+            style={{ 
+              background: COLORS.navy, 
+              border: "none", 
+              cursor: "pointer", 
+              color: "white",
+              padding: "8px 16px",
+              borderRadius: "4px",
+              fontWeight: "600",
+              fontSize: "0.9rem"
+            }}>
+            {content.nav.contact}
+          </button>
           <button style={{ background: "none", border: "none", cursor: "pointer", color: COLORS.navy }}>
             <Icons.ShoppingBag />
           </button>
@@ -267,6 +307,12 @@ const Header = ({ onNavigate }) => {
               {item.label}
             </button>
           ))}
+           <button 
+              onClick={() => handleNavClick('contact')}
+              style={{ background: 'none', border: 'none', textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "1.1rem", textAlign: "center", fontFamily: 'inherit' }}
+            >
+              {content.nav.contact}
+            </button>
         </div>
       )}
       
@@ -650,6 +696,84 @@ const ShopPage = () => {
   );
 };
 
+const ContactPage = () => {
+  const content = useContent();
+  const page = content.contactPage;
+
+  return (
+    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+      <div style={{ backgroundColor: COLORS.navy, padding: '80px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+        <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
+        <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{page.title}</h1>
+          <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue, maxWidth: '600px', margin: '0 auto' }}>{page.subtitle}</p>
+        </div>
+      </div>
+
+      <div style={{ ...styles.container, padding: '60px 20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px' }}>
+          
+          {/* Contact Info */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+             <div style={{ padding: '32px', backgroundColor: COLORS.white, borderRadius: '16px', border: `1px solid ${COLORS.lightGray}`, boxShadow: '0 4px 10px rgba(0,0,0,0.03)' }}>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                  <div style={{ padding: '12px', background: 'rgba(123, 175, 212, 0.1)', borderRadius: '12px', color: COLORS.carolinaBlue }}>
+                    <Icons.Mail />
+                  </div>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: COLORS.navy }}>{page.emailLabel}</h3>
+               </div>
+               <p style={{ color: '#4B5563', fontSize: '1.1rem', marginBottom: '8px' }}>
+                 We're here to help with any questions.
+               </p>
+               <a href={`mailto:${page.emailValue}`} style={{ fontSize: '1.25rem', color: COLORS.carolinaBlue, fontWeight: '600', textDecoration: 'none' }}>
+                 {page.emailValue}
+               </a>
+             </div>
+             
+             <div style={{ padding: '32px', backgroundColor: COLORS.navy, borderRadius: '16px', color: 'white' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '16px' }}>FAQ</h3>
+                <p style={{ color: '#E0E7FF', lineHeight: '1.6' }}>
+                  Typically, we respond to all inquiries within 24-48 hours. For immediate assistance with an existing order, please include your order number in the subject line.
+                </p>
+             </div>
+          </div>
+
+          {/* Form */}
+          <div style={{ backgroundColor: COLORS.white, padding: '40px', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
+            <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div>
+                <label className="label">{page.form.name}</label>
+                <input type="text" className="input-field" placeholder="John Doe" />
+              </div>
+              <div>
+                <label className="label">{page.form.email}</label>
+                <input type="email" className="input-field" placeholder="john@example.com" />
+              </div>
+              <div>
+                <label className="label">{page.form.subject}</label>
+                <select className="input-field">
+                  <option>General Inquiry</option>
+                  <option>Order Status</option>
+                  <option>Valuation Request</option>
+                  <option>Partnership</option>
+                </select>
+              </div>
+              <div>
+                <label className="label">{page.form.message}</label>
+                <textarea className="input-field" rows={5} placeholder="How can we help you?" style={{ resize: 'vertical' }}></textarea>
+              </div>
+              <button type="submit" style={{ ...styles.button.primary, width: '100%', marginTop: '10px' }}>
+                {page.form.submit}
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Newsletter = () => {
   const content = useContent();
 
@@ -692,8 +816,16 @@ const Newsletter = () => {
   );
 };
 
-const Footer = () => {
+const Footer = ({ onNavigate }) => {
   const content = useContent();
+
+  const handleLinkClick = (e, linkText) => {
+    e.preventDefault();
+    if (linkText === "Contact Us") {
+      onNavigate('contact');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <footer style={{ backgroundColor: "#0F172A", color: "#94A3B8", padding: "60px 0 20px" }}>
@@ -715,7 +847,7 @@ const Footer = () => {
             <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>{content.footer.supportColumn.title}</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
               {content.footer.supportColumn.links.map((link, i) => (
-                 <li key={i}><a href="#" style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
+                 <li key={i}><a href="#" onClick={(e) => handleLinkClick(e, link)} style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
               ))}
             </ul>
           </div>
@@ -771,6 +903,8 @@ const App = () => {
         return <ShopPage />;
       case 'about':
         return <AboutPage />;
+      case 'contact':
+        return <ContactPage />;
       case 'home':
       default:
         return (
@@ -798,7 +932,7 @@ const App = () => {
         {renderPage()}
         <Newsletter />
       </main>
-      <Footer />
+      <Footer onNavigate={setCurrentPage} />
     </ContentContext.Provider>
   );
 };
