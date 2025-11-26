@@ -1,0 +1,103 @@
+{
+  "common": {
+    "brandName": "CAROLINA",
+    "brandSuffix": "MINTED",
+    "currencyPrefix": "$",
+    "loading": "Loading Experience..."
+  },
+  "nav": {
+    "home": "Home",
+    "shopDrops": "Shop Drops",
+    "aboutUs": "About Us",
+    "contact": "Contact"
+  },
+  "hero": {
+    "est": "Est. 2024 • Chapel Hill, NC",
+    "headlineStart": "Collectibles",
+    "headlineHighlight": "Born & Bred.",
+    "subtext": "Premium trading cards, memorabilia, and exclusive drops for the true fan. Certified authentic, delivered with Southern hospitality.",
+    "ctaPrimary": "Shop Latest Drop",
+    "ctaSecondary": "Join the Community"
+  },
+  "features": {
+    "items": [
+      { 
+        "title": "Certified Authentic", 
+        "desc": "Every item is verified by our expert team or third-party graders.",
+        "iconType": "shield"
+      },
+      { 
+        "title": "Lightning Fast Shipping", 
+        "desc": "Same-day processing on all orders placed before 2PM EST.",
+        "iconType": "zap"
+      },
+      { 
+        "title": "Mint Condition", 
+        "desc": "We specialize in Gem Mint 10s and pristine raw cards.",
+        "iconType": "star"
+      }
+    ]
+  },
+  "shop": {
+    "sectionTitle": "Latest Drops",
+    "sectionSubtitle": "Fresh from the vault. Secure your piece of history before they're gone.",
+    "addToCart": "Add to Cart",
+    "viewAllButton": "View All Inventory",
+    "inventory": [
+      {
+        "id": "prod_001",
+        "title": "#23 Retro Rookie Card (Mint 10)",
+        "price": "450.00",
+        "type": "GRAIL",
+        "color": "gold"
+      },
+      {
+        "id": "prod_002",
+        "title": "Carolina Blue Hobby Box '24",
+        "price": "120.00",
+        "type": "SEALED",
+        "color": "blue"
+      },
+      {
+        "id": "prod_003",
+        "title": "Championship Court Floor Piece",
+        "price": "85.00",
+        "type": "MEMORABILIA",
+        "color": "blue"
+      },
+      {
+        "id": "prod_004",
+        "title": "Coach's Signature Series",
+        "price": "299.00",
+        "type": "AUTO",
+        "color": "gold"
+      }
+    ]
+  },
+  "about": {
+    "initials": "CM",
+    "title": "Preserving History.",
+    "text": "Carolina Minted Collectibles isn't just a shop; it's a tribute to the legends who paved the way. We source the finest cards and memorabilia with a focus on North Carolina sports history. Whether you are hunting for that elusive rookie card or a piece of the hardwood, we are your trusted partner."
+  },
+  "newsletter": {
+    "title": "Don't Miss the Next Drop",
+    "text": "Join the VIP list for early access to new arrivals and exclusive discounts.",
+    "placeholder": "Enter your email address",
+    "button": "Subscribe"
+  },
+  "footer": {
+    "brandColumn": {
+      "title": "Carolina Minted",
+      "text": "The premier destination for high-end sports collectibles in the Tar Heel State."
+    },
+    "shopColumn": {
+      "title": "Shop",
+      "links": ["New Arrivals", "Best Sellers", "Graded Cards", "Memorabilia"]
+    },
+    "supportColumn": {
+      "title": "Support",
+      "links": ["FAQ", "Shipping & Returns", "Authenticity Guarantee", "Contact Us"]
+    },
+    "copyright": "© 2024 Carolina Minted Collectibles, LLC. All rights reserved."
+  }
+}

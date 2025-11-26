@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { createRoot } from "react-dom/client";
 
 // --- Branding Constants ---
@@ -32,6 +32,15 @@ const Icons = {
   Zap: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={COLORS.carolinaBlue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
   ),
+};
+
+const getIconByName = (name) => {
+  switch(name) {
+    case 'shield': return <Icons.Shield />;
+    case 'star': return <Icons.Star />;
+    case 'zap': return <Icons.Zap />;
+    default: return <Icons.Star />;
+  }
 };
 
 // --- Styles (CSS-in-JS) ---
@@ -73,6 +82,28 @@ const styles = {
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(5px);
     }
+
+    .loading-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: ${COLORS.offWhite};
+      flex-direction: column;
+      gap: 20px;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid ${COLORS.lightGray};
+      border-top: 5px solid ${COLORS.carolinaBlue};
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   `,
   container: {
     maxWidth: "1200px",
@@ -110,17 +141,36 @@ const styles = {
   },
 };
 
+// --- Localization Context ---
+const ContentContext = createContext(null);
+
+const useContent = () => {
+  const context = useContext(ContentContext);
+  if (!context) {
+    throw new Error("useContent must be used within a ContentProvider");
+  }
+  return context;
+};
+
 // --- Components ---
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const content = useContent();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const navItems = [
+    { label: content.nav.home, id: 'home' },
+    { label: content.nav.shopDrops, id: 'shop-drops' },
+    { label: content.nav.aboutUs, id: 'about-us' },
+    { label: content.nav.contact, id: 'contact' },
+  ];
 
   return (
     <header
@@ -154,16 +204,16 @@ const Header = () => {
             <span style={{ transform: 'rotate(-45deg)', color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>C</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '12px' }}>
-             <span style={{ fontSize: "1.25rem", fontWeight: "800", color: COLORS.navy, letterSpacing: "-0.02em", lineHeight: "1" }}>CAROLINA</span>
-             <span style={{ fontSize: "1.25rem", fontWeight: "300", color: COLORS.carolinaBlue, letterSpacing: "0.15em", lineHeight: "1" }}>MINTED</span>
+             <span style={{ fontSize: "1.25rem", fontWeight: "800", color: COLORS.navy, letterSpacing: "-0.02em", lineHeight: "1" }}>{content.common.brandName}</span>
+             <span style={{ fontSize: "1.25rem", fontWeight: "300", color: COLORS.carolinaBlue, letterSpacing: "0.15em", lineHeight: "1" }}>{content.common.brandSuffix}</span>
           </div>
         </div>
 
         {/* Desktop Nav */}
         <nav className="desktop-nav" style={{ display: window.innerWidth > 768 ? "flex" : "none", gap: "32px", alignItems: "center" }}>
-          {["Home", "Shop Drops", "About Us", "Contact"].map((item) => (
-            <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} style={{ textDecoration: "none", color: COLORS.navy, fontWeight: "500", fontSize: "0.95rem" }}>
-              {item}
+          {navItems.map((item) => (
+            <a key={item.id} href={`#${item.id}`} style={{ textDecoration: "none", color: COLORS.navy, fontWeight: "500", fontSize: "0.95rem" }}>
+              {item.label}
             </a>
           ))}
           <button style={{ background: "none", border: "none", cursor: "pointer", color: COLORS.navy }}>
@@ -195,14 +245,14 @@ const Header = () => {
           flexDirection: "column",
           gap: "16px",
         }}>
-          {["Home", "Shop Drops", "About Us", "Contact"].map((item) => (
+          {navItems.map((item) => (
             <a 
-              key={item} 
-              href={`#${item.toLowerCase().replace(" ", "-")}`} 
+              key={item.id} 
+              href={`#${item.id}`} 
               onClick={() => setIsOpen(false)}
               style={{ textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "1.1rem", textAlign: "center" }}
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </div>
@@ -219,6 +269,8 @@ const Header = () => {
 };
 
 const Hero = () => {
+  const content = useContent();
+  
   return (
     <section id="home" style={{ position: "relative", minHeight: "90vh", display: "flex", alignItems: "center", paddingTop: "80px" }}>
       {/* Background with Argyle Pattern */}
@@ -248,7 +300,7 @@ const Hero = () => {
             marginBottom: "24px",
             border: `1px solid rgba(19, 41, 75, 0.1)`
           }}>
-            Est. 2024 • Chapel Hill, NC
+            {content.hero.est}
           </div>
           <h1 style={{ 
             fontSize: "clamp(2.5rem, 5vw, 4.5rem)", 
@@ -257,18 +309,18 @@ const Hero = () => {
             lineHeight: "1.1", 
             marginBottom: "24px" 
           }}>
-            Collectibles <br />
-            <span style={{ color: COLORS.carolinaBlue }}>Born & Bred.</span>
+            {content.hero.headlineStart} <br />
+            <span style={{ color: COLORS.carolinaBlue }}>{content.hero.headlineHighlight}</span>
           </h1>
           <p style={{ fontSize: "1.25rem", color: "#4B5563", marginBottom: "40px", lineHeight: "1.6", maxWidth: "480px" }}>
-            Premium trading cards, memorabilia, and exclusive drops for the true fan. Certified authentic, delivered with Southern hospitality.
+            {content.hero.subtext}
           </p>
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
             <button style={{...styles.button.primary, boxShadow: "0 10px 20px rgba(19, 41, 75, 0.2)"}}>
-              Shop Latest Drop
+              {content.hero.ctaPrimary}
             </button>
             <button style={styles.button.outline}>
-              Join the Community
+              {content.hero.ctaSecondary}
             </button>
           </div>
         </div>
@@ -278,11 +330,7 @@ const Hero = () => {
 };
 
 const Features = () => {
-  const features = [
-    { icon: <Icons.Shield />, title: "Certified Authentic", desc: "Every item is verified by our expert team or third-party graders." },
-    { icon: <Icons.Zap />, title: "Lightning Fast Shipping", desc: "Same-day processing on all orders placed before 2PM EST." },
-    { icon: <Icons.Star />, title: "Mint Condition", desc: "We specialize in Gem Mint 10s and pristine raw cards." },
-  ];
+  const content = useContent();
 
   return (
     <section style={{ backgroundColor: COLORS.white, ...styles.section }}>
@@ -292,7 +340,7 @@ const Features = () => {
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", 
           gap: "40px" 
         }}>
-          {features.map((f, i) => (
+          {content.features.items.map((f, i) => (
             <div key={i} style={{ 
               padding: "32px", 
               borderRadius: "16px", 
@@ -313,7 +361,7 @@ const Features = () => {
                 justifyContent: "center",
                 marginBottom: "20px"
               }}>
-                {f.icon}
+                {getIconByName(f.iconType)}
               </div>
               <h3 style={{ fontSize: "1.25rem", fontWeight: "700", color: COLORS.navy, marginBottom: "12px" }}>{f.title}</h3>
               <p style={{ color: "#6B7280", lineHeight: "1.6" }}>{f.desc}</p>
@@ -325,90 +373,93 @@ const Features = () => {
   );
 };
 
-const ProductCard = ({ title, price, type, color }) => (
-  <div style={{ 
-    backgroundColor: COLORS.white, 
-    borderRadius: "12px", 
-    overflow: "hidden", 
-    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)",
-    border: `1px solid ${COLORS.lightGray}`,
-    display: "flex",
-    flexDirection: "column",
-    transition: "all 0.3s ease",
-    cursor: "pointer",
-    position: "relative"
-  }}
-  className="product-card"
-  >
-    {/* Product Image Placeholder */}
+const ProductCard = ({ title, price, type, color }) => {
+  const content = useContent();
+  return (
     <div style={{ 
-      height: "280px", 
-      backgroundColor: "#F3F4F6", 
-      position: "relative",
+      backgroundColor: COLORS.white, 
+      borderRadius: "12px", 
+      overflow: "hidden", 
+      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)",
+      border: `1px solid ${COLORS.lightGray}`,
       display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      overflow: "hidden"
-    }}>
-      {/* Pattern on Card Background */}
-      <div style={{
-        position: 'absolute', inset: 0, opacity: 0.1,
-        backgroundImage: `repeating-linear-gradient(45deg, ${COLORS.navy} 0, ${COLORS.navy} 1px, transparent 0, transparent 50%)`,
-        backgroundSize: '10px 10px'
-      }}></div>
-      
-      {/* The "Card" Object */}
-      <div style={{
-        width: "160px",
-        height: "220px",
-        backgroundColor: color === 'gold' ? '#FCD34D' : COLORS.carolinaBlue,
-        borderRadius: "8px",
-        boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
-        transform: "rotate(-5deg)",
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '10px',
-        border: '4px solid white'
-      }}>
-          <div style={{ width: '100%', height: '50%', background: 'rgba(255,255,255,0.3)', borderRadius: '4px 4px 0 0' }}></div>
-          <div style={{ width: '60%', height: '40%', background: COLORS.navy, borderRadius: '50%', marginTop: '-20px', border: '2px solid white' }}></div>
-      </div>
-      
+      flexDirection: "column",
+      transition: "all 0.3s ease",
+      cursor: "pointer",
+      position: "relative"
+    }}
+    className="product-card"
+    >
+      {/* Product Image Placeholder */}
       <div style={{ 
-        position: "absolute", 
-        top: "12px", 
-        left: "12px", 
-        backgroundColor: COLORS.navy, 
-        color: "white", 
-        padding: "4px 8px", 
-        borderRadius: "4px", 
-        fontSize: "0.75rem", 
-        fontWeight: "bold" 
+        height: "280px", 
+        backgroundColor: "#F3F4F6", 
+        position: "relative", 
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden"
       }}>
-        {type}
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.1,
+          backgroundImage: `repeating-linear-gradient(45deg, ${COLORS.navy} 0, ${COLORS.navy} 1px, transparent 0, transparent 50%)`,
+          backgroundSize: '10px 10px'
+        }}></div>
+        
+        <div style={{
+          width: "160px",
+          height: "220px",
+          backgroundColor: color === 'gold' ? '#FCD34D' : COLORS.carolinaBlue,
+          borderRadius: "8px",
+          boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
+          transform: "rotate(-5deg)",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '10px',
+          border: '4px solid white'
+        }}>
+            <div style={{ width: '100%', height: '50%', background: 'rgba(255,255,255,0.3)', borderRadius: '4px 4px 0 0' }}></div>
+            <div style={{ width: '60%', height: '40%', background: COLORS.navy, borderRadius: '50%', marginTop: '-20px', border: '2px solid white' }}></div>
+        </div>
+        
+        <div style={{ 
+          position: "absolute", 
+          top: "12px", 
+          left: "12px", 
+          backgroundColor: COLORS.navy, 
+          color: "white", 
+          padding: "4px 8px", 
+          borderRadius: "4px", 
+          fontSize: "0.75rem", 
+          fontWeight: "bold" 
+        }}>
+          {type}
+        </div>
       </div>
-    </div>
 
-    <div style={{ padding: "20px" }}>
-      <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: COLORS.navy, marginBottom: "8px" }}>{title}</h3>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontSize: "1.25rem", fontWeight: "600", color: COLORS.text }}>{price}</span>
-        <span style={{ fontSize: "0.875rem", color: COLORS.carolinaBlue, fontWeight: "500" }}>Add to Cart</span>
+      <div style={{ padding: "20px" }}>
+        <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: COLORS.navy, marginBottom: "8px" }}>{title}</h3>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: "1.25rem", fontWeight: "600", color: COLORS.text }}>{content.common.currencyPrefix}{price}</span>
+          <span style={{ fontSize: "0.875rem", color: COLORS.carolinaBlue, fontWeight: "500" }}>{content.shop.addToCart}</span>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ShopSection = () => {
+  const content = useContent();
+
   return (
     <section id="shop-drops" style={{ ...styles.section, backgroundColor: COLORS.offWhite }}>
       <div style={styles.container}>
         <div style={{ textAlign: "center", marginBottom: "60px" }}>
-          <h2 style={{ fontSize: "2.5rem", fontWeight: "800", color: COLORS.navy, marginBottom: "16px" }}>Latest Drops</h2>
+          <h2 style={{ fontSize: "2.5rem", fontWeight: "800", color: COLORS.navy, marginBottom: "16px" }}>{content.shop.sectionTitle}</h2>
           <p style={{ color: "#6B7280", maxWidth: "600px", margin: "0 auto" }}>
-            Fresh from the vault. Secure your piece of history before they're gone.
+            {content.shop.sectionSubtitle}
           </p>
         </div>
 
@@ -417,132 +468,171 @@ const ShopSection = () => {
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
           gap: "32px" 
         }}>
-          <ProductCard title="#23 Retro Rookie Card (Mint 10)" price="$450.00" type="GRAIL" color="gold" />
-          <ProductCard title="Carolina Blue Hobby Box '24" price="$120.00" type="SEALED" color="blue" />
-          <ProductCard title="Championship Court Floor Piece" price="$85.00" type="MEMORABILIA" color="blue" />
-          <ProductCard title="Coach's Signature Series" price="$299.00" type="AUTO" color="gold" />
+          {content.shop.inventory.map((item) => (
+             <ProductCard 
+                key={item.id}
+                title={item.title} 
+                price={item.price} 
+                type={item.type} 
+                color={item.color} 
+             />
+          ))}
         </div>
         
         <div style={{ textAlign: 'center', marginTop: '60px' }}>
-            <button style={{...styles.button.outline, padding: "16px 48px"}}>View All Inventory</button>
+            <button style={{...styles.button.outline, padding: "16px 48px"}}>{content.shop.viewAllButton}</button>
         </div>
       </div>
     </section>
   );
 };
 
-const AboutSection = () => (
-  <section id="about-us" style={{ ...styles.section, backgroundColor: COLORS.navy, color: COLORS.white }}>
-    <div style={styles.container}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-          <div style={{ 
-              width: '80px', 
-              height: '80px', 
-              backgroundColor: 'white', 
-              borderRadius: '50%', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              marginBottom: '32px'
-          }}>
-              <span style={{ fontSize: '2rem', fontWeight: 'bold', color: COLORS.navy }}>CM</span>
-          </div>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '24px' }}>Preserving History.</h2>
-          <p style={{ maxWidth: '700px', fontSize: '1.2rem', lineHeight: '1.8', color: '#E0E7FF', marginBottom: '40px' }}>
-            Carolina Minted Collectibles isn't just a shop; it's a tribute to the legends who paved the way. 
-            We source the finest cards and memorabilia with a focus on North Carolina sports history. 
-            Whether you are hunting for that elusive rookie card or a piece of the hardwood, we are your trusted partner.
-          </p>
-          <div style={{ width: '100px', height: '4px', backgroundColor: COLORS.carolinaBlue, borderRadius: '2px' }}></div>
-      </div>
-    </div>
-  </section>
-);
+const AboutSection = () => {
+  const content = useContent();
 
-const Newsletter = () => (
-  <section style={{ padding: "100px 0", backgroundColor: COLORS.carolinaBlue }}>
-    <div style={styles.container}>
-       <div style={{ 
-         backgroundColor: COLORS.white, 
-         borderRadius: "24px", 
-         padding: "40px", 
-         textAlign: "center",
-         boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
-         maxWidth: "800px",
-         margin: "0 auto"
-       }}>
-          <h3 style={{ fontSize: "2rem", fontWeight: "800", color: COLORS.navy, marginBottom: "16px" }}>Don't Miss the Next Drop</h3>
-          <p style={{ color: "#6B7280", marginBottom: "32px" }}>Join the VIP list for early access to new arrivals and exclusive discounts.</p>
-          
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
-            <input 
-              type="email" 
-              placeholder="Enter your email address" 
-              style={{ 
-                padding: "16px 24px", 
-                borderRadius: "8px", 
-                border: `2px solid ${COLORS.lightGray}`, 
-                width: "100%", 
-                maxWidth: "350px",
-                fontSize: "1rem",
-                outline: "none"
-              }} 
-            />
-            <button style={{...styles.button.primary, backgroundColor: COLORS.navy}}>
-              Subscribe
-            </button>
-          </div>
-       </div>
-    </div>
-  </section>
-)
+  return (
+    <section id="about-us" style={{ ...styles.section, backgroundColor: COLORS.navy, color: COLORS.white }}>
+      <div style={styles.container}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            <div style={{ 
+                width: '80px', 
+                height: '80px', 
+                backgroundColor: 'white', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                marginBottom: '32px'
+            }}>
+                <span style={{ fontSize: '2rem', fontWeight: 'bold', color: COLORS.navy }}>{content.about.initials}</span>
+            </div>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '24px' }}>{content.about.title}</h2>
+            <p style={{ maxWidth: '700px', fontSize: '1.2rem', lineHeight: '1.8', color: '#E0E7FF', marginBottom: '40px' }}>
+              {content.about.text}
+            </p>
+            <div style={{ width: '100px', height: '4px', backgroundColor: COLORS.carolinaBlue, borderRadius: '2px' }}></div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-const Footer = () => (
-  <footer style={{ backgroundColor: "#0F172A", color: "#94A3B8", padding: "60px 0 20px" }}>
-    <div style={styles.container}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px", marginBottom: "60px" }}>
-        <div>
-          <h4 style={{ color: "white", fontSize: "1.2rem", fontWeight: "700", marginBottom: "20px" }}>Carolina Minted</h4>
-          <p style={{ fontSize: "0.9rem", lineHeight: "1.6" }}>The premier destination for high-end sports collectibles in the Tar Heel State.</p>
+const Newsletter = () => {
+  const content = useContent();
+
+  return (
+    <section id="contact" style={{ padding: "100px 0", backgroundColor: COLORS.carolinaBlue }}>
+      <div style={styles.container}>
+         <div style={{ 
+           backgroundColor: COLORS.white, 
+           borderRadius: "24px", 
+           padding: "40px", 
+           textAlign: "center",
+           boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+           maxWidth: "800px",
+           margin: "0 auto"
+         }}>
+            <h3 style={{ fontSize: "2rem", fontWeight: "800", color: COLORS.navy, marginBottom: "16px" }}>{content.newsletter.title}</h3>
+            <p style={{ color: "#6B7280", marginBottom: "32px" }}>{content.newsletter.text}</p>
+            
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
+              <input 
+                type="email" 
+                placeholder={content.newsletter.placeholder} 
+                style={{ 
+                  padding: "16px 24px", 
+                  borderRadius: "8px", 
+                  border: `2px solid ${COLORS.lightGray}`, 
+                  width: "100%", 
+                  maxWidth: "350px",
+                  fontSize: "1rem",
+                  outline: "none"
+                }} 
+              />
+              <button style={{...styles.button.primary, backgroundColor: COLORS.navy}}>
+                {content.newsletter.button}
+              </button>
+            </div>
+         </div>
+      </div>
+    </section>
+  );
+};
+
+const Footer = () => {
+  const content = useContent();
+
+  return (
+    <footer style={{ backgroundColor: "#0F172A", color: "#94A3B8", padding: "60px 0 20px" }}>
+      <div style={styles.container}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px", marginBottom: "60px" }}>
+          <div>
+            <h4 style={{ color: "white", fontSize: "1.2rem", fontWeight: "700", marginBottom: "20px" }}>{content.footer.brandColumn.title}</h4>
+            <p style={{ fontSize: "0.9rem", lineHeight: "1.6" }}>{content.footer.brandColumn.text}</p>
+          </div>
+          <div>
+            <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>{content.footer.shopColumn.title}</h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
+              {content.footer.shopColumn.links.map((link, i) => (
+                <li key={i}><a href="#" style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>{content.footer.supportColumn.title}</h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
+              {content.footer.supportColumn.links.map((link, i) => (
+                 <li key={i}><a href="#" style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <div>
-          <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>Shop</h4>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
-            <li><a href="#" style={{ textDecoration: "none", color: "inherit" }}>New Arrivals</a></li>
-            <li><a href="#" style={{ textDecoration: "none", color: "inherit" }}>Best Sellers</a></li>
-            <li><a href="#" style={{ textDecoration: "none", color: "inherit" }}>Graded Cards</a></li>
-            <li><a href="#" style={{ textDecoration: "none", color: "inherit" }}>Memorabilia</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>Support</h4>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
-            <li><a href="#" style={{ textDecoration: "none", color: "inherit" }}>FAQ</a></li>
-            <li><a href="#" style={{ textDecoration: "none", color: "inherit" }}>Shipping & Returns</a></li>
-            <li><a href="#" style={{ textDecoration: "none", color: "inherit" }}>Authenticity Guarantee</a></li>
-            <li><a href="#" style={{ textDecoration: "none", color: "inherit" }}>Contact Us</a></li>
-          </ul>
+        
+        <div style={{ borderTop: "1px solid #1E293B", paddingTop: "20px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "20px" }}>
+          <p style={{ fontSize: "0.875rem" }}>{content.footer.copyright}</p>
+          <div style={{ display: "flex", gap: "20px" }}>
+             {/* Social Placeholders */}
+             <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
+             <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
+             <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
+          </div>
         </div>
       </div>
-      
-      <div style={{ borderTop: "1px solid #1E293B", paddingTop: "20px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "20px" }}>
-        <p style={{ fontSize: "0.875rem" }}>© 2024 Carolina Minted Collectibles, LLC. All rights reserved.</p>
-        <div style={{ display: "flex", gap: "20px" }}>
-           {/* Social Placeholders */}
-           <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
-           <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
-           <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
-        </div>
-      </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 
 // --- Main App Component ---
 
 const App = () => {
+  const [content, setContent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('./en.json')
+      .then(res => res.json())
+      .then(data => {
+        setContent(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to load language file", err);
+        // Fallback or error state
+      });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <style>{styles.global}</style>
+        <div className="spinner"></div>
+        <p>Loading Experience...</p>
+      </div>
+    );
+  }
+
   return (
-    <>
+    <ContentContext.Provider value={content}>
       <style>{styles.global}</style>
       <Header />
       <main>
@@ -553,7 +643,7 @@ const App = () => {
         <Newsletter />
       </main>
       <Footer />
-    </>
+    </ContentContext.Provider>
   );
 };
 
