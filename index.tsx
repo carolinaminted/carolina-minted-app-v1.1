@@ -1,6 +1,140 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { createRoot } from "react-dom/client";
 
+// --- Types & Interfaces ---
+
+interface InventoryItem {
+  id: string;
+  title: string;
+  price: string;
+  type: string;
+  color: string;
+}
+
+interface SocialPost {
+  id: string;
+  author: string;
+  authorInitials: string;
+  time: string;
+  text: string;
+  hasImage: boolean;
+  imageColor?: string;
+  likes: number;
+  comments: number;
+}
+
+interface FeatureItem {
+  title: string;
+  desc: string;
+  iconType: string;
+}
+
+interface NavContent {
+  home: string;
+  shopDrops: string;
+  community: string;
+  aboutUs: string;
+  contact: string;
+}
+
+interface HeroContent {
+  est: string;
+  headlineStart: string;
+  headlineHighlight: string;
+  subtext: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
+}
+
+interface ShopContent {
+  sectionTitle: string;
+  pageTitle: string;
+  sectionSubtitle: string;
+  addToCart: string;
+  viewAllButton: string;
+  inventory: InventoryItem[];
+}
+
+interface MemorabiliaContent {
+  title: string;
+  subtitle: string;
+  inventory: InventoryItem[];
+}
+
+interface AboutPageContent {
+  header: string;
+  missionStatement: string;
+  storyTitle: string;
+  storyBody: string;
+  whatWeDoTitle: string;
+  whatWeDoIntro: string;
+  whatWeDoList: { title: string; desc: string }[];
+  approachTitle: string;
+  approachBody: string;
+  lookingAheadTitle: string;
+  lookingAheadBody: string;
+  whyChooseUsTitle: string;
+  whyChooseUsList: string[];
+}
+
+interface ContactPageContent {
+  title: string;
+  subtitle: string;
+  emailLabel: string;
+  emailValue: string;
+  form: {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+    submit: string;
+  };
+}
+
+interface CommunityPageContent {
+  title: string;
+  subtitle: string;
+  feed: SocialPost[];
+}
+
+interface NewsletterContent {
+  title: string;
+  text: string;
+  placeholder: string;
+  button: string;
+}
+
+interface FooterContent {
+  brandColumn: { title: string; text: string };
+  shopColumn: { title: string; links: string[] };
+  supportColumn: { title: string; links: string[] };
+  copyright: string;
+}
+
+interface AppContent {
+  common: {
+    brandName: string;
+    brandSuffix: string;
+    currencyPrefix: string;
+    loading: string;
+  };
+  nav: NavContent;
+  hero: HeroContent;
+  features: { items: FeatureItem[] };
+  shop: ShopContent;
+  memorabiliaPage: MemorabiliaContent;
+  about: {
+    initials: string;
+    sectionTitle: string;
+    sectionText: string;
+    page: AboutPageContent;
+  };
+  communityPage: CommunityPageContent;
+  contactPage: ContactPageContent;
+  newsletter: NewsletterContent;
+  footer: FooterContent;
+}
+
 // --- Branding Constants ---
 const COLORS = {
   carolinaBlue: "#7BAFD4",
@@ -48,7 +182,7 @@ const Icons = {
   )
 };
 
-const getIconByName = (name) => {
+const getIconByName = (name: string) => {
   switch(name) {
     case 'shield': return <Icons.Shield />;
     case 'star': return <Icons.Star />;
@@ -249,7 +383,7 @@ const styles = {
 };
 
 // --- Localization Context ---
-const ContentContext = createContext(null);
+const ContentContext = createContext<AppContent | null>(null);
 
 const useContent = () => {
   const context = useContext(ContentContext);
@@ -261,7 +395,7 @@ const useContent = () => {
 
 // --- Components ---
 
-const Header = ({ onNavigate }) => {
+const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const content = useContent();
@@ -279,7 +413,7 @@ const Header = ({ onNavigate }) => {
     { label: content.nav.aboutUs, id: 'about' },
   ];
 
-  const handleNavClick = (id) => {
+  const handleNavClick = (id: string) => {
     onNavigate(id);
     setIsOpen(false);
   };
@@ -410,7 +544,7 @@ const Header = ({ onNavigate }) => {
   );
 };
 
-const Hero = ({ onShopClick, onCommunityClick }) => {
+const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCommunityClick: () => void }) => {
   const content = useContent();
   
   return (
@@ -521,10 +655,17 @@ const Features = () => {
   );
 };
 
-const ProductCard: React.FC<{ title: any; price: any; type: any; color: any }> = ({ title, price, type, color }) => {
+interface ProductCardProps {
+  title: string;
+  price: string;
+  type: string;
+  color: string;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color }) => {
   const content = useContent();
   return (
-    <div style={{ 
+    <article style={{ 
       backgroundColor: COLORS.white, 
       borderRadius: "12px", 
       overflow: "hidden", 
@@ -594,11 +735,11 @@ const ProductCard: React.FC<{ title: any; price: any; type: any; color: any }> =
           <span style={{ fontSize: "0.875rem", color: COLORS.carolinaBlue, fontWeight: "500" }}>{content.shop.addToCart}</span>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 
-const ShopSection = ({ onNavigate }) => {
+const ShopSection = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
   const content = useContent();
   const previewInventory = content.shop.inventory.slice(0, 4);
 
@@ -674,7 +815,7 @@ const AboutSection = () => {
 
 // --- New Pages ---
 
-const PostCard: React.FC<{ post: any }> = ({ post }) => {
+const PostCard: React.FC<{ post: SocialPost }> = ({ post }) => {
   return (
     <div style={{
       backgroundColor: COLORS.white,
@@ -890,16 +1031,22 @@ const AboutPage = () => {
   );
 };
 
-const ShopPage = () => {
-  const content = useContent();
+// --- Generic Inventory Page (Replaces ShopPage and MemorabiliaPage) ---
 
+interface InventoryPageProps {
+  title: string;
+  subtitle: string;
+  items: InventoryItem[];
+}
+
+const InventoryPage: React.FC<InventoryPageProps> = ({ title, subtitle, items }) => {
   return (
     <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       <div style={{ backgroundColor: COLORS.navy, padding: '80px 0', color: COLORS.white, marginBottom: '60px', position: 'relative' }}>
          <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
          <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
-            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '16px' }}>{content.shop.pageTitle}</h1>
-            <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue }}>{content.shop.sectionSubtitle}</p>
+            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '16px' }}>{title}</h1>
+            <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue }}>{subtitle}</p>
          </div>
       </div>
 
@@ -909,42 +1056,7 @@ const ShopPage = () => {
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
           gap: "32px" 
         }}>
-          {content.shop.inventory.map((item) => (
-             <ProductCard 
-                key={item.id}
-                title={item.title} 
-                price={item.price} 
-                type={item.type} 
-                color={item.color} 
-             />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const MemorabiliaPage = () => {
-  const content = useContent();
-  const page = content.memorabiliaPage;
-
-  return (
-    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
-      <div style={{ backgroundColor: COLORS.navy, padding: '80px 0', color: COLORS.white, marginBottom: '60px', position: 'relative' }}>
-         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
-         <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
-            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '16px' }}>{page.title}</h1>
-            <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue }}>{page.subtitle}</p>
-         </div>
-      </div>
-
-      <div style={{ ...styles.container, paddingBottom: '80px' }}>
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
-          gap: "32px" 
-        }}>
-          {page.inventory.map((item) => (
+          {items.map((item) => (
              <ProductCard 
                 key={item.id}
                 title={item.title} 
@@ -1079,10 +1191,10 @@ const Newsletter = () => {
   );
 };
 
-const Footer = ({ onNavigate }) => {
+const Footer = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
   const content = useContent();
 
-  const handleLinkClick = (e, linkText) => {
+  const handleLinkClick = (e: React.MouseEvent, linkText: string) => {
     e.preventDefault();
     switch (linkText) {
       case "New Arrivals":
@@ -1102,7 +1214,6 @@ const Footer = ({ onNavigate }) => {
         onNavigate('about');
         break;
       default:
-        // Optionally handle unknown links or just do nothing
         console.warn(`No route defined for footer link: ${linkText}`);
         break;
     }
@@ -1151,7 +1262,7 @@ const Footer = ({ onNavigate }) => {
 // --- Main App Component ---
 
 const App = () => {
-  const [content, setContent] = useState(null);
+  const [content, setContent] = useState<AppContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState('home');
 
@@ -1164,23 +1275,21 @@ const App = () => {
       })
       .catch(err => {
         console.error("Failed to load language file", err);
-        // Fallback or error state
       });
   }, []);
 
-  // NEW: Scroll to top on page change
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentPage]);
 
-  const handleNavigation = (page) => {
+  const handleNavigation = (page: string) => {
     if (currentPage === page) {
       window.scrollTo(0, 0);
     }
     setCurrentPage(page);
   };
 
-  if (isLoading) {
+  if (isLoading || !content) {
     return (
       <div className="loading-container">
         <style>{styles.global}</style>
@@ -1193,9 +1302,9 @@ const App = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'shop':
-        return <ShopPage />;
+        return <InventoryPage title={content.shop.pageTitle} subtitle={content.shop.sectionSubtitle} items={content.shop.inventory} />;
       case 'memorabilia':
-        return <MemorabiliaPage />;
+        return <InventoryPage title={content.memorabiliaPage.title} subtitle={content.memorabiliaPage.subtitle} items={content.memorabiliaPage.inventory} />;
       case 'about':
         return <AboutPage />;
       case 'contact':
@@ -1231,5 +1340,5 @@ const App = () => {
   );
 };
 
-const root = createRoot(document.getElementById("root"));
+const root = createRoot(document.getElementById("root")!);
 root.render(<App />);
