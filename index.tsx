@@ -146,6 +146,51 @@ const styles = {
       color: ${COLORS.navy};
       margin-bottom: 6px;
     }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .hero-content {
+        text-align: center;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-buttons {
+        justify-content: center !important;
+      }
+      
+      .feature-card {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      /* About Page Mobile Optimizations */
+      .about-wrapper {
+        text-align: center;
+      }
+      .about-story-title {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .what-we-do-card {
+        text-align: center;
+        align-items: center;
+        border-left: none !important;
+        border-top: 4px solid ${COLORS.carolinaBlue};
+      }
+      .why-choose-us-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .why-choose-us-item svg {
+        margin-bottom: 8px;
+      }
+    }
   `,
   container: {
     maxWidth: "1200px",
@@ -366,7 +411,7 @@ const Hero = ({ onShopClick, onCommunityClick }) => {
       }}></div>
 
       <div style={styles.container}>
-        <div style={{ maxWidth: "600px" }}>
+        <div className="hero-content" style={{ maxWidth: "600px" }}>
           <div style={{ 
             display: "inline-block", 
             padding: "6px 12px", 
@@ -393,7 +438,7 @@ const Hero = ({ onShopClick, onCommunityClick }) => {
           <p style={{ fontSize: "1.25rem", color: "#4B5563", marginBottom: "40px", lineHeight: "1.6", maxWidth: "480px" }}>
             {content.hero.subtext}
           </p>
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+          <div className="hero-buttons" style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
             <button 
               type="button"
               onClick={onShopClick}
@@ -425,7 +470,7 @@ const Features = () => {
           gap: "40px" 
         }}>
           {content.features.items.map((f, i) => (
-            <div key={i} style={{ 
+            <div key={i} className="feature-card" style={{ 
               padding: "32px", 
               borderRadius: "16px", 
               backgroundColor: COLORS.offWhite,
@@ -457,7 +502,7 @@ const Features = () => {
   );
 };
 
-const ProductCard = ({ title, price, type, color }) => {
+const ProductCard: React.FC<{ title: any; price: any; type: any; color: any }> = ({ title, price, type, color }) => {
   const content = useContent();
   return (
     <div style={{ 
@@ -610,7 +655,7 @@ const AboutSection = () => {
 
 // --- New Pages ---
 
-const PostCard = ({ post }) => {
+const PostCard: React.FC<{ post: any }> = ({ post }) => {
   return (
     <div style={{
       backgroundColor: COLORS.white,
@@ -764,7 +809,7 @@ const AboutPage = () => {
       </div>
 
       {/* Content */}
-      <div style={{ ...styles.container, padding: '80px 20px' }}>
+      <div className="about-wrapper" style={{ ...styles.container, padding: '80px 20px' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '60px' }}>
           
           {/* Mission */}
@@ -775,7 +820,7 @@ const AboutPage = () => {
 
           {/* Story */}
           <div>
-            <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '20px', borderBottom: `4px solid ${COLORS.carolinaBlue}`, display: 'inline-block', paddingBottom: '8px' }}>{page.storyTitle}</h2>
+            <h2 className="about-story-title" style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '20px', borderBottom: `4px solid ${COLORS.carolinaBlue}`, display: 'inline-block', paddingBottom: '8px' }}>{page.storyTitle}</h2>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#374151' }}>{page.storyBody}</p>
           </div>
 
@@ -785,7 +830,7 @@ const AboutPage = () => {
             <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#374151', marginBottom: '24px' }}>{page.whatWeDoIntro}</p>
             <div style={{ display: 'grid', gap: '24px' }}>
               {page.whatWeDoList.map((item, idx) => (
-                <div key={idx} style={{ padding: '24px', backgroundColor: COLORS.white, borderRadius: '12px', borderLeft: `4px solid ${COLORS.carolinaBlue}`, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <div key={idx} className="what-we-do-card" style={{ padding: '24px', backgroundColor: COLORS.white, borderRadius: '12px', borderLeft: `4px solid ${COLORS.carolinaBlue}`, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
                   <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: COLORS.navy, marginBottom: '8px' }}>{item.title}</h3>
                   <p style={{ color: '#4B5563', lineHeight: '1.6' }}>{item.desc}</p>
                 </div>
@@ -813,7 +858,7 @@ const AboutPage = () => {
              <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '30px' }}>{page.whyChooseUsTitle}</h2>
              <div style={{ display: 'grid', gap: '16px' }}>
                {page.whyChooseUsList.map((item, idx) => (
-                 <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                 <div key={idx} className="why-choose-us-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                    <div style={{ flexShrink: 0, marginTop: '4px' }}><Icons.Check /></div>
                    <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#374151', margin: 0 }}>{item}</p>
                  </div>
