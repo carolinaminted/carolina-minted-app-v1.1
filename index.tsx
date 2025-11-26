@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, { useState, useEffect, useLayoutEffect, createContext, useContext } from "react";
 import { createRoot } from "react-dom/client";
 
 // --- Types & Interfaces ---
@@ -1168,7 +1168,7 @@ const Newsletter = () => {
   const content = useContent();
 
   return (
-    <section id="contact" style={{ padding: "100px 0", backgroundColor: COLORS.carolinaBlue }}>
+    <section id="newsletter" style={{ padding: "100px 0", backgroundColor: COLORS.carolinaBlue }}>
       <div style={styles.container}>
          <div style={{ 
            backgroundColor: COLORS.white, 
@@ -1288,15 +1288,16 @@ const App = () => {
       });
   }, []);
 
-  useEffect(() => {
+  // Use useLayoutEffect to ensure scroll happens before paint
+  useLayoutEffect(() => {
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [currentPage]);
 
   const handleNavigation = (page: string) => {
-    if (currentPage === page) {
-      window.scrollTo(0, 0);
-    }
     setCurrentPage(page);
+    window.scrollTo(0, 0);
   };
 
   if (isLoading || !content) {
