@@ -190,6 +190,25 @@ const styles = {
       .why-choose-us-item svg {
         margin-bottom: 8px;
       }
+
+      /* Footer Mobile Styles */
+      .footer-grid {
+        text-align: center;
+      }
+      .footer-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .footer-list {
+        align-items: center !important; 
+      }
+      .footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center !important;
+        text-align: center;
+      }
     }
   `,
   container: {
@@ -1092,22 +1111,22 @@ const Footer = ({ onNavigate }) => {
   return (
     <footer style={{ backgroundColor: "#0F172A", color: "#94A3B8", padding: "60px 0 20px" }}>
       <div style={styles.container}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px", marginBottom: "60px" }}>
-          <div>
+        <div className="footer-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px", marginBottom: "60px" }}>
+          <div className="footer-col">
             <h4 style={{ color: "white", fontSize: "1.2rem", fontWeight: "700", marginBottom: "20px" }}>{content.footer.brandColumn.title}</h4>
             <p style={{ fontSize: "0.9rem", lineHeight: "1.6" }}>{content.footer.brandColumn.text}</p>
           </div>
-          <div>
+          <div className="footer-col">
             <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>{content.footer.shopColumn.title}</h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
+            <ul className="footer-list" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
               {content.footer.shopColumn.links.map((link, i) => (
                 <li key={i}><a href="#" onClick={(e) => handleLinkClick(e, link)} style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
               ))}
             </ul>
           </div>
-          <div>
+          <div className="footer-col">
             <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>{content.footer.supportColumn.title}</h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
+            <ul className="footer-list" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
               {content.footer.supportColumn.links.map((link, i) => (
                  <li key={i}><a href="#" onClick={(e) => handleLinkClick(e, link)} style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
               ))}
@@ -1115,7 +1134,7 @@ const Footer = ({ onNavigate }) => {
           </div>
         </div>
         
-        <div style={{ borderTop: "1px solid #1E293B", paddingTop: "20px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "20px" }}>
+        <div className="footer-bottom" style={{ borderTop: "1px solid #1E293B", paddingTop: "20px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "20px" }}>
           <p style={{ fontSize: "0.875rem" }}>{content.footer.copyright}</p>
           <div style={{ display: "flex", gap: "20px" }}>
              {/* Social Placeholders */}
