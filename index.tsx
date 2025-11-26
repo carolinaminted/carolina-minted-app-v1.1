@@ -1170,15 +1170,10 @@ const Newsletter = () => {
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
               <input 
                 type="email" 
+                className="input-field"
                 placeholder={content.newsletter.placeholder} 
                 style={{ 
-                  padding: "16px 24px", 
-                  borderRadius: "8px", 
-                  border: `2px solid ${COLORS.lightGray}`, 
-                  width: "100%", 
-                  maxWidth: "350px",
-                  fontSize: "1rem",
-                  outline: "none"
+                  maxWidth: "350px"
                 }} 
               />
               <button style={{...styles.button.primary, backgroundColor: COLORS.navy}}>
