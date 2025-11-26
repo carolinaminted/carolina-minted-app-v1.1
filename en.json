@@ -8,6 +8,7 @@
   "nav": {
     "home": "Home",
     "shopDrops": "Shop Drops",
+    "community": "Community",
     "aboutUs": "About Us",
     "contact": "Contact"
   },
@@ -118,6 +119,44 @@
         "Long-Term Focus – We're building a business for the next generation of collectors"
       ]
     }
+  },
+  "communityPage": {
+    "title": "The Huddle",
+    "subtitle": "Show offs, mail days, and market talk.",
+    "feed": [
+      {
+        "id": "p1",
+        "author": "Carolina Minted",
+        "authorInitials": "CM",
+        "time": "2h ago",
+        "text": "🚨 JUST IN: Huge PSA return day! We hit 85% Gem Mint 10s on this sub. This Umbreon VMAX is absolutely stunning in person. Listing it in the shop later tonight! 💎",
+        "hasImage": true,
+        "imageColor": "navy",
+        "likes": 124,
+        "comments": 18
+      },
+      {
+        "id": "p2",
+        "author": "Collector_Steve",
+        "authorInitials": "CS",
+        "time": "5h ago",
+        "text": "Does anyone know if the grading standards for vintage have tightened up recently? Sent in a '86 Fleer Jordan that looked clean but came back an 8. Still happy to have it slabbed though!",
+        "hasImage": false,
+        "likes": 45,
+        "comments": 12
+      },
+      {
+        "id": "p3",
+        "author": "Carolina Minted",
+        "authorInitials": "CM",
+        "time": "1d ago",
+        "text": "Who is watching the game tonight? If UNC wins, we might just drop a surprise discount code. Stay tuned. 👀🏀 #TarHeels",
+        "hasImage": true,
+        "imageColor": "blue",
+        "likes": 289,
+        "comments": 56
+      }
+    ]
   },
   "contactPage": {
     "title": "Contact Us",

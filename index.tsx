@@ -37,6 +37,15 @@ const Icons = {
   Mail: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
   ),
+  Heart: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+  ),
+  MessageSquare: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  ),
+  Share: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+  )
 };
 
 const getIconByName = (name) => {
@@ -51,7 +60,7 @@ const getIconByName = (name) => {
 // --- Styles (CSS-in-JS) ---
 const styles = {
   global: `
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
     body, html {
       margin: 0;
@@ -196,6 +205,7 @@ const Header = ({ onNavigate }) => {
   const navItems = [
     { label: content.nav.home, id: 'home' },
     { label: content.nav.shopDrops, id: 'shop' },
+    { label: content.nav.community, id: 'community' },
     { label: content.nav.aboutUs, id: 'about' },
   ];
 
@@ -261,7 +271,7 @@ const Header = ({ onNavigate }) => {
               background: COLORS.navy, 
               border: "none", 
               cursor: "pointer", 
-              color: "white",
+              color: "white", 
               padding: "8px 16px",
               borderRadius: "4px",
               fontWeight: "600",
@@ -326,7 +336,7 @@ const Header = ({ onNavigate }) => {
   );
 };
 
-const Hero = ({ onShopClick }) => {
+const Hero = ({ onShopClick, onCommunityClick }) => {
   const content = useContent();
   
   return (
@@ -379,7 +389,9 @@ const Hero = ({ onShopClick }) => {
               style={{...styles.button.primary, boxShadow: "0 10px 20px rgba(19, 41, 75, 0.2)"}}>
               {content.hero.ctaPrimary}
             </button>
-            <button style={styles.button.outline}>
+            <button 
+              onClick={onCommunityClick}
+              style={styles.button.outline}>
               {content.hero.ctaSecondary}
             </button>
           </div>
@@ -584,6 +596,145 @@ const AboutSection = () => {
 };
 
 // --- New Pages ---
+
+const PostCard = ({ post }) => {
+  return (
+    <div style={{
+      backgroundColor: COLORS.white,
+      borderRadius: '16px',
+      border: `1px solid ${COLORS.lightGray}`,
+      marginBottom: '24px',
+      overflow: 'hidden',
+      transition: 'box-shadow 0.2s ease',
+      cursor: 'default'
+    }}
+    onMouseEnter={(e) => e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.08)"}
+    onMouseLeave={(e) => e.currentTarget.style.boxShadow = "none"}
+    >
+      <div style={{ padding: '20px' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundColor: COLORS.navy,
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: '700',
+            fontSize: '0.9rem',
+            marginRight: '12px'
+          }}>
+            {post.authorInitials}
+          </div>
+          <div>
+            <div style={{ fontWeight: '700', color: COLORS.navy }}>{post.author}</div>
+            <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>{post.time}</div>
+          </div>
+        </div>
+
+        {/* Text */}
+        <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#1F2937', marginBottom: '16px' }}>
+          {post.text}
+        </p>
+      </div>
+
+      {/* Image (Optional) */}
+      {post.hasImage && (
+        <div style={{
+          width: '100%',
+          height: '300px',
+          backgroundColor: post.imageColor === 'navy' ? COLORS.navy : COLORS.carolinaBlue,
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+           <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15 }}></div>
+           <div style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 'bold', fontSize: '1.5rem', letterSpacing: '2px' }}>IMAGE PREVIEW</div>
+        </div>
+      )}
+
+      {/* Footer / Actions */}
+      <div style={{ 
+        padding: '16px 20px', 
+        borderTop: `1px solid ${COLORS.lightGray}`,
+        display: 'flex',
+        gap: '24px',
+        color: '#6B7280'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+           <Icons.Heart /> <span style={{ fontSize: '0.9rem' }}>{post.likes}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+           <Icons.MessageSquare /> <span style={{ fontSize: '0.9rem' }}>{post.comments}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+           <Icons.Share /> <span style={{ fontSize: '0.9rem' }}>Share</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CommunityPage = () => {
+  const content = useContent();
+  const page = content.communityPage;
+
+  return (
+    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+      {/* Header */}
+      <div style={{ backgroundColor: COLORS.navy, padding: '60px 0 40px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+        <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
+        <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '12px' }}>{page.title}</h1>
+          <p style={{ fontSize: '1.1rem', color: COLORS.carolinaBlue }}>{page.subtitle}</p>
+        </div>
+      </div>
+
+      <div style={{ ...styles.container, padding: '40px 20px 80px' }}>
+        <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+          {/* Create Post Placeholder */}
+          <div style={{ 
+            backgroundColor: 'white', 
+            borderRadius: '16px', 
+            padding: '20px', 
+            marginBottom: '32px',
+            border: `1px solid ${COLORS.lightGray}`,
+            display: 'flex',
+            gap: '16px',
+            alignItems: 'center'
+          }}>
+             <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#E5E7EB' }}></div>
+             <input 
+              type="text" 
+              placeholder="What's on your mind?" 
+              style={{ 
+                flex: 1, 
+                border: 'none', 
+                backgroundColor: '#F3F4F6', 
+                borderRadius: '24px', 
+                padding: '12px 20px',
+                outline: 'none'
+              }} 
+             />
+          </div>
+
+          {/* Feed */}
+          {page.feed.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+
+          <div style={{ textAlign: 'center', marginTop: '40px', color: '#9CA3AF' }}>
+            <p>You're all caught up!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const AboutPage = () => {
   const content = useContent();
@@ -905,14 +1056,22 @@ const App = () => {
         return <AboutPage />;
       case 'contact':
         return <ContactPage />;
+      case 'community':
+        return <CommunityPage />;
       case 'home':
       default:
         return (
           <>
-            <Hero onShopClick={() => {
-              setCurrentPage('shop');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} />
+            <Hero 
+              onShopClick={() => {
+                setCurrentPage('shop');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }} 
+              onCommunityClick={() => {
+                setCurrentPage('community');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
             <Features />
             <ShopSection onNavigate={(page) => {
               setCurrentPage(page);
