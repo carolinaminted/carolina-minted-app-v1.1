@@ -435,20 +435,16 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
           onClick={() => handleNavClick('home')}
           style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
         >
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            backgroundColor: COLORS.carolinaBlue, 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            borderRadius: '4px',
-            transform: 'rotate(45deg)',
-            boxShadow: `0 4px 10px rgba(123, 175, 212, 0.5)`
-          }}>
-            <span style={{ transform: 'rotate(-45deg)', color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>C</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '12px' }}>
+          <img 
+            src="./Charquaza.png" 
+            alt="Carolina Minted Logo" 
+            style={{ 
+              height: '60px', 
+              width: 'auto',
+              objectFit: 'contain'
+            }} 
+          />
+          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '6px' }}>
              <span style={{ fontSize: "1.25rem", fontWeight: "800", color: COLORS.navy, letterSpacing: "-0.02em", lineHeight: "1" }}>{content.common.brandName}</span>
              <span style={{ fontSize: "1.25rem", fontWeight: "300", color: COLORS.carolinaBlue, letterSpacing: "0.15em", lineHeight: "1" }}>{content.common.brandSuffix}</span>
           </div>
