@@ -40,6 +40,7 @@
   },
   "shop": {
     "sectionTitle": "Latest Drops",
+    "pageTitle": "Shop Drops",
     "sectionSubtitle": "Fresh from the vault. Secure your piece of history before they're gone.",
     "addToCart": "Add to Cart",
     "viewAllButton": "View All Inventory",
@@ -71,13 +72,52 @@
         "price": "299.00",
         "type": "AUTO",
         "color": "gold"
+      },
+      {
+        "id": "prod_005",
+        "title": "Pikachu Illustrator Style (Holo)",
+        "price": "950.00",
+        "type": "POKEMON",
+        "color": "gold"
+      },
+      {
+        "id": "prod_006",
+        "title": "Galactic Empire Deck (Sealed)",
+        "price": "55.00",
+        "type": "STAR WARS",
+        "color": "blue"
       }
     ]
   },
   "about": {
     "initials": "CM",
-    "title": "Preserving History.",
-    "text": "Carolina Minted Collectibles isn't just a shop; it's a tribute to the legends who paved the way. We source the finest cards and memorabilia with a focus on North Carolina sports history. Whether you are hunting for that elusive rookie card or a piece of the hardwood, we are your trusted partner."
+    "sectionTitle": "Preserving History.",
+    "sectionText": "Carolina Minted Collectibles isn't just a shop; it's a tribute to the legends who paved the way. We source the finest cards and memorabilia with a focus on North Carolina sports history.",
+    "page": {
+      "header": "Our Mission",
+      "missionStatement": "Carolina Minted Collectibles' mission is to build lasting value for collectors and investors by strategically acquiring, curating, and trading high-grade Pokémon and sports collectibles. We focus on assets with long-term growth potential, navigating market dynamics to secure scarcity and capitalize on opportunities for future generations.",
+      "storyTitle": "Our Story",
+      "storyBody": "Carolina Minted Collectibles was founded in 2025 with a clear vision: to build lasting value for collectors and investors by strategically acquiring, curating, and trading premium trading cards. What started as a passion for the hobby has evolved into a thriving business focused on high-grade Pokémon, sports collectibles, and Star Wars Unlimited trading cards. Based in Gastonia, North Carolina, we combine market expertise with a deep appreciation for the collectibles that connect generations of fans and players.",
+      "whatWeDoTitle": "What We Do",
+      "whatWeDoIntro": "We specialize in professionally graded collectibles with long-term growth potential. Our inventory features:",
+      "whatWeDoList": [
+        { "title": "PSA & BGS Graded Cards", "desc": "Premium modern Pokémon cards (PSA 10 and PSA 9), select vintage sports cards, and high-grade Star Wars Unlimited collectibles" },
+        { "title": "Strategic Inventory", "desc": "We focus on assets with proven scarcity and strong market fundamentals, particularly cards from the Pokémon Sword & Shield and Sun & Moon eras" },
+        { "title": "Market Expertise", "desc": "We navigate market dynamics to identify undervalued opportunities and capitalize on emerging trends" }
+      ],
+      "approachTitle": "Our Approach",
+      "approachBody": "At Carolina Minted Collectibles, we treat every card as an investment. Our rigorous acquisition process ensures we only offer collectibles that meet our standards for condition, authenticity, and value potential. We use industry-leading grading services (PSA and Beckett) to verify authenticity and condition, and we store our premium inventory in PSA Vault for maximum security and liquidity. Our commitment is simple: quality over quantity. We're continually consolidating our holdings toward fewer, higher-value assets that represent the best opportunities for collectors and investors.",
+      "lookingAheadTitle": "Looking Ahead",
+      "lookingAheadBody": "We're expanding our operations to better serve the collecting community. In 2026, we'll be launching enhanced retail operations, including an e-commerce platform and in-person sales opportunities. We're also growing our Star Wars Unlimited selection, with a focus on limited, serialized cards that present compelling opportunities for future appreciation.",
+      "whyChooseUsTitle": "Why Choose Us",
+      "whyChooseUsList": [
+        "Authenticated Quality – Every graded card is certified by industry-leading services",
+        "Market Knowledge – We stay ahead of trends and identify value opportunities",
+        "Secure Storage – Premium inventory stored in PSA Vault",
+        "Transparent Pricing – Fair market values based on recent sales data",
+        "Long-Term Focus – We're building a business for the next generation of collectors"
+      ]
+    }
   },
   "newsletter": {
     "title": "Don't Miss the Next Drop",

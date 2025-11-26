@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { createRoot } from "react-dom/client";
 
@@ -31,6 +30,9 @@ const Icons = {
   ),
   Zap: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={COLORS.carolinaBlue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+  ),
+  Check: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={COLORS.carolinaBlue} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
   ),
 };
 
@@ -154,7 +156,7 @@ const useContent = () => {
 
 // --- Components ---
 
-const Header = () => {
+const Header = ({ onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const content = useContent();
@@ -167,10 +169,15 @@ const Header = () => {
 
   const navItems = [
     { label: content.nav.home, id: 'home' },
-    { label: content.nav.shopDrops, id: 'shop-drops' },
-    { label: content.nav.aboutUs, id: 'about-us' },
-    { label: content.nav.contact, id: 'contact' },
+    { label: content.nav.shopDrops, id: 'shop' },
+    { label: content.nav.aboutUs, id: 'about' },
   ];
+
+  const handleNavClick = (id) => {
+    onNavigate(id);
+    setIsOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <header
@@ -189,7 +196,10 @@ const Header = () => {
     >
       <div style={{ ...styles.container, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div 
+          onClick={() => handleNavClick('home')}
+          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+        >
           <div style={{ 
             width: '40px', 
             height: '40px', 
@@ -212,9 +222,12 @@ const Header = () => {
         {/* Desktop Nav */}
         <nav className="desktop-nav" style={{ display: window.innerWidth > 768 ? "flex" : "none", gap: "32px", alignItems: "center" }}>
           {navItems.map((item) => (
-            <a key={item.id} href={`#${item.id}`} style={{ textDecoration: "none", color: COLORS.navy, fontWeight: "500", fontSize: "0.95rem" }}>
+            <button 
+              key={item.id} 
+              onClick={() => handleNavClick(item.id)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', textDecoration: "none", color: COLORS.navy, fontWeight: "500", fontSize: "0.95rem", fontFamily: 'inherit' }}>
               {item.label}
-            </a>
+            </button>
           ))}
           <button style={{ background: "none", border: "none", cursor: "pointer", color: COLORS.navy }}>
             <Icons.ShoppingBag />
@@ -246,14 +259,13 @@ const Header = () => {
           gap: "16px",
         }}>
           {navItems.map((item) => (
-            <a 
+            <button 
               key={item.id} 
-              href={`#${item.id}`} 
-              onClick={() => setIsOpen(false)}
-              style={{ textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "1.1rem", textAlign: "center" }}
+              onClick={() => handleNavClick(item.id)}
+              style={{ background: 'none', border: 'none', textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "1.1rem", textAlign: "center", fontFamily: 'inherit' }}
             >
               {item.label}
-            </a>
+            </button>
           ))}
         </div>
       )}
@@ -268,7 +280,7 @@ const Header = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ onShopClick }) => {
   const content = useContent();
   
   return (
@@ -316,7 +328,9 @@ const Hero = () => {
             {content.hero.subtext}
           </p>
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-            <button style={{...styles.button.primary, boxShadow: "0 10px 20px rgba(19, 41, 75, 0.2)"}}>
+            <button 
+              onClick={onShopClick}
+              style={{...styles.button.primary, boxShadow: "0 10px 20px rgba(19, 41, 75, 0.2)"}}>
               {content.hero.ctaPrimary}
             </button>
             <button style={styles.button.outline}>
@@ -450,11 +464,12 @@ const ProductCard = ({ title, price, type, color }) => {
   );
 };
 
-const ShopSection = () => {
+const ShopSection = ({ onNavigate }) => {
   const content = useContent();
+  const previewInventory = content.shop.inventory.slice(0, 4);
 
   return (
-    <section id="shop-drops" style={{ ...styles.section, backgroundColor: COLORS.offWhite }}>
+    <section id="shop-preview" style={{ ...styles.section, backgroundColor: COLORS.offWhite }}>
       <div style={styles.container}>
         <div style={{ textAlign: "center", marginBottom: "60px" }}>
           <h2 style={{ fontSize: "2.5rem", fontWeight: "800", color: COLORS.navy, marginBottom: "16px" }}>{content.shop.sectionTitle}</h2>
@@ -463,6 +478,158 @@ const ShopSection = () => {
           </p>
         </div>
 
+        <div style={{ 
+          display: "grid", 
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+          gap: "32px" 
+        }}>
+          {previewInventory.map((item) => (
+             <ProductCard 
+                key={item.id}
+                title={item.title} 
+                price={item.price} 
+                type={item.type} 
+                color={item.color} 
+             />
+          ))}
+        </div>
+        
+        <div style={{ textAlign: 'center', marginTop: '60px' }}>
+            <button 
+              onClick={() => onNavigate('shop')}
+              style={{...styles.button.outline, padding: "16px 48px"}}
+            >
+              {content.shop.viewAllButton}
+            </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const AboutSection = () => {
+  const content = useContent();
+
+  return (
+    <section id="about-preview" style={{ ...styles.section, backgroundColor: COLORS.navy, color: COLORS.white }}>
+      <div style={styles.container}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            <div style={{ 
+                width: '80px', 
+                height: '80px', 
+                backgroundColor: 'white', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                marginBottom: '32px'
+            }}>
+                <span style={{ fontSize: '2rem', fontWeight: 'bold', color: COLORS.navy }}>{content.about.initials}</span>
+            </div>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '24px' }}>{content.about.sectionTitle}</h2>
+            <p style={{ maxWidth: '700px', fontSize: '1.2rem', lineHeight: '1.8', color: '#E0E7FF', marginBottom: '40px' }}>
+              {content.about.sectionText}
+            </p>
+            <div style={{ width: '100px', height: '4px', backgroundColor: COLORS.carolinaBlue, borderRadius: '2px' }}></div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// --- New Pages ---
+
+const AboutPage = () => {
+  const content = useContent();
+  const page = content.about.page;
+
+  return (
+    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+      {/* Header */}
+      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+        <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
+        <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{content.nav.aboutUs}</h1>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ ...styles.container, padding: '80px 20px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '60px' }}>
+          
+          {/* Mission */}
+          <div style={{ textAlign: 'center', padding: '40px', backgroundColor: COLORS.white, borderRadius: '16px', border: `1px solid ${COLORS.lightGray}`, boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+            <h2 style={{ color: COLORS.navy, fontSize: '1.8rem', fontWeight: '800', marginBottom: '16px' }}>{page.header}</h2>
+            <p style={{ fontSize: '1.25rem', lineHeight: '1.6', fontStyle: 'italic', color: '#4B5563' }}>"{page.missionStatement}"</p>
+          </div>
+
+          {/* Story */}
+          <div>
+            <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '20px', borderBottom: `4px solid ${COLORS.carolinaBlue}`, display: 'inline-block', paddingBottom: '8px' }}>{page.storyTitle}</h2>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#374151' }}>{page.storyBody}</p>
+          </div>
+
+          {/* What We Do */}
+          <div>
+            <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '20px' }}>{page.whatWeDoTitle}</h2>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#374151', marginBottom: '24px' }}>{page.whatWeDoIntro}</p>
+            <div style={{ display: 'grid', gap: '24px' }}>
+              {page.whatWeDoList.map((item, idx) => (
+                <div key={idx} style={{ padding: '24px', backgroundColor: COLORS.white, borderRadius: '12px', borderLeft: `4px solid ${COLORS.carolinaBlue}`, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: COLORS.navy, marginBottom: '8px' }}>{item.title}</h3>
+                  <p style={{ color: '#4B5563', lineHeight: '1.6' }}>{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Approach */}
+          <div style={{ backgroundColor: COLORS.navy, color: COLORS.white, padding: '40px', borderRadius: '16px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'relative', zIndex: 2 }}>
+              <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '20px' }}>{page.approachTitle}</h2>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#E0E7FF' }}>{page.approachBody}</p>
+            </div>
+            <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 1 }}></div>
+          </div>
+
+          {/* Looking Ahead */}
+          <div>
+            <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '20px' }}>{page.lookingAheadTitle}</h2>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#374151' }}>{page.lookingAheadBody}</p>
+          </div>
+
+          {/* Why Choose Us */}
+          <div>
+             <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '30px' }}>{page.whyChooseUsTitle}</h2>
+             <div style={{ display: 'grid', gap: '16px' }}>
+               {page.whyChooseUsList.map((item, idx) => (
+                 <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                   <div style={{ flexShrink: 0, marginTop: '4px' }}><Icons.Check /></div>
+                   <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#374151', margin: 0 }}>{item}</p>
+                 </div>
+               ))}
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ShopPage = () => {
+  const content = useContent();
+
+  return (
+    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+      <div style={{ backgroundColor: COLORS.navy, padding: '80px 0', color: COLORS.white, marginBottom: '60px', position: 'relative' }}>
+         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
+         <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
+            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '16px' }}>{content.shop.pageTitle}</h1>
+            <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue }}>{content.shop.sectionSubtitle}</p>
+         </div>
+      </div>
+
+      <div style={{ ...styles.container, paddingBottom: '80px' }}>
         <div style={{ 
           display: "grid", 
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
@@ -478,42 +645,8 @@ const ShopSection = () => {
              />
           ))}
         </div>
-        
-        <div style={{ textAlign: 'center', marginTop: '60px' }}>
-            <button style={{...styles.button.outline, padding: "16px 48px"}}>{content.shop.viewAllButton}</button>
-        </div>
       </div>
-    </section>
-  );
-};
-
-const AboutSection = () => {
-  const content = useContent();
-
-  return (
-    <section id="about-us" style={{ ...styles.section, backgroundColor: COLORS.navy, color: COLORS.white }}>
-      <div style={styles.container}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <div style={{ 
-                width: '80px', 
-                height: '80px', 
-                backgroundColor: 'white', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                marginBottom: '32px'
-            }}>
-                <span style={{ fontSize: '2rem', fontWeight: 'bold', color: COLORS.navy }}>{content.about.initials}</span>
-            </div>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '24px' }}>{content.about.title}</h2>
-            <p style={{ maxWidth: '700px', fontSize: '1.2rem', lineHeight: '1.8', color: '#E0E7FF', marginBottom: '40px' }}>
-              {content.about.text}
-            </p>
-            <div style={{ width: '100px', height: '4px', backgroundColor: COLORS.carolinaBlue, borderRadius: '2px' }}></div>
-        </div>
-      </div>
-    </section>
+    </div>
   );
 };
 
@@ -607,6 +740,7 @@ const Footer = () => {
 const App = () => {
   const [content, setContent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState('home');
 
   useEffect(() => {
     fetch('./en.json')
@@ -631,15 +765,37 @@ const App = () => {
     );
   }
 
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'shop':
+        return <ShopPage />;
+      case 'about':
+        return <AboutPage />;
+      case 'home':
+      default:
+        return (
+          <>
+            <Hero onShopClick={() => {
+              setCurrentPage('shop');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} />
+            <Features />
+            <ShopSection onNavigate={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} />
+            <AboutSection />
+          </>
+        );
+    }
+  };
+
   return (
     <ContentContext.Provider value={content}>
       <style>{styles.global}</style>
-      <Header />
+      <Header onNavigate={setCurrentPage} />
       <main>
-        <Hero />
-        <Features />
-        <ShopSection />
-        <AboutSection />
+        {renderPage()}
         <Newsletter />
       </main>
       <Footer />
