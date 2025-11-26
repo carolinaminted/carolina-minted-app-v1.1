@@ -123,15 +123,21 @@ const styles = {
       width: 100%;
       padding: 14px 16px;
       border-radius: 8px;
-      border: 1px solid ${COLORS.lightGray};
+      border: 1px solid rgba(123, 175, 212, 0.5);
+      background-color: rgba(123, 175, 212, 0.15);
+      color: ${COLORS.navy};
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
       transition: all 0.2s;
       outline: none;
     }
+    .input-field::placeholder {
+      color: rgba(19, 41, 75, 0.6);
+    }
     .input-field:focus {
-      border-color: ${COLORS.carolinaBlue};
-      box-shadow: 0 0 0 3px rgba(123, 175, 212, 0.2);
+      border-color: ${COLORS.navy};
+      background-color: rgba(123, 175, 212, 0.25);
+      box-shadow: 0 0 0 3px rgba(123, 175, 212, 0.3);
     }
     .label {
       display: block;
