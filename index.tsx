@@ -291,6 +291,10 @@ const styles = {
       .hero-est-badge {
         display: none !important;
       }
+
+      .page-header {
+        padding: 30px 0 30px;
+      }
     }
     
     @media (max-width: 768px) {
@@ -302,6 +306,10 @@ const styles = {
       
       .app-page-offset {
         padding-top: 70px; /* Reduced header height */
+      }
+      
+      .page-header {
+        padding: 60px 0 40px;
       }
     }
 
@@ -727,7 +735,7 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
       }}></div>
 
       <div style={styles.container}>
-        <div className="hero-content" style={{ maxWidth: "600px" }}>
+        <div className="hero-content" style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="hero-est-badge" style={{ 
             display: "inline-block", 
             padding: "6px 12px", 
@@ -751,10 +759,18 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
             {content.hero.headlineStart} <br />
             <span style={{ color: COLORS.carolinaBlue }}>{content.hero.headlineHighlight}</span>
           </h1>
-          <p style={{ fontSize: "1.25rem", color: "#4B5563", marginBottom: "40px", lineHeight: "1.6", maxWidth: "480px" }}>
+          <p style={{ 
+            fontSize: "1.25rem", 
+            color: "#4B5563", 
+            marginBottom: "40px", 
+            lineHeight: "1.6", 
+            maxWidth: "480px", 
+            marginLeft: "auto", 
+            marginRight: "auto" 
+          }}>
             {content.hero.subtext}
           </p>
-          <div className="hero-buttons" style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+          <div className="hero-buttons" style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
             <button 
               type="button"
               onClick={onShopClick}
@@ -791,7 +807,11 @@ const Features = () => {
               borderRadius: "16px", 
               backgroundColor: COLORS.offWhite,
               border: `1px solid ${COLORS.lightGray}`,
-              transition: "transform 0.2s ease"
+              transition: "transform 0.2s ease",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center"
             }}
             onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
             onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}
@@ -847,7 +867,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color }) 
         height: "280px", 
         backgroundColor: "#F3F4F6", 
         position: "relative", 
-        display: "flex",
+        display: "flex", 
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden"
@@ -911,9 +931,7 @@ const ShopSection = ({ onNavigate }: { onNavigate: (page: string) => void }) => 
       <div style={styles.container}>
         <div style={{ textAlign: "center", marginBottom: "60px" }}>
           <h2 style={{ fontSize: "2.5rem", fontWeight: "800", color: COLORS.navy, marginBottom: "16px" }}>{content.shop.sectionTitle}</h2>
-          <p style={{ color: "#6B7280", maxWidth: "600px", margin: "0 auto" }}>
-            {content.shop.sectionSubtitle}
-          </p>
+          <p style={{ color: "#6B7280", maxWidth: "600px", margin: "0 auto" }}>{content.shop.sectionSubtitle}</p>
         </div>
 
         <div style={{ 
@@ -1067,11 +1085,10 @@ const CommunityPage = () => {
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       {/* Header */}
-      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+      <div className="page-header" style={{ backgroundColor: COLORS.navy, color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
         <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{page.title}</h1>
-          <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue }}>{page.subtitle}</p>
         </div>
       </div>
 
@@ -1124,7 +1141,7 @@ const AboutPage = () => {
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       {/* Header */}
-      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+      <div className="page-header" style={{ backgroundColor: COLORS.navy, color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
         <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{content.nav.aboutUs}</h1>
@@ -1224,15 +1241,14 @@ interface InventoryPageProps {
 const InventoryPage: React.FC<InventoryPageProps> = ({ title, subtitle, items }) => {
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
-      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+      <div className="page-header" style={{ backgroundColor: COLORS.navy, color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
          <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
          <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{title}</h1>
-            <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue, maxWidth: '600px', margin: '0 auto' }}>{subtitle}</p>
          </div>
       </div>
 
-      <div style={{ ...styles.container, paddingBottom: '80px' }}>
+      <div style={{ ...styles.container, paddingBottom: '80px', paddingTop: '60px' }}>
         <div style={{ 
           display: "grid", 
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
@@ -1259,7 +1275,7 @@ const ContactPage = () => {
 
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
-      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+      <div className="page-header" style={{ backgroundColor: COLORS.navy, color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
         <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{page.title}</h1>
