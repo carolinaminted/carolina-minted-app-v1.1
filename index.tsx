@@ -281,8 +281,17 @@ const styles = {
       margin-bottom: 6px;
     }
 
+    /* Page Offset for Fixed Header */
+    .app-page-offset {
+      padding-top: 100px;
+    }
+
     /* Mobile Responsive Styles */
     @media (max-width: 768px) {
+      .app-page-offset {
+        padding-top: 80px; /* Reduces padding on mobile to match smaller header height */
+      }
+
       .hero-content {
         text-align: center;
         margin-left: auto !important;
@@ -423,11 +432,12 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
       <div className="header-container" style={{ ...styles.container, display: "flex", justifyContent: "space-between", alignItems: "center", position: 'relative' }}>
         {/* Logo */}
         <div 
+          className="logo-container"
           onClick={() => handleNavClick('home')}
           style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
         >
           <img 
-            src="https://raw.githubusercontent.com/carolinaminted/carolina-minted-web-app/main/Charquaza.png" 
+            src="https://raw.githubusercontent.com/carolinaminted/carolina-minted-web-app/main/logo-argyle-small.png" 
             alt="Carolina Minted Logo" 
             style={{ 
               height: '60px', 
@@ -443,7 +453,7 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
         </div>
 
         {/* Desktop Nav */}
-        <nav className="desktop-nav" style={{ display: window.innerWidth > 768 ? "flex" : "none", gap: "32px", alignItems: "center" }}>
+        <nav className="desktop-nav" style={{ display: "flex", gap: "32px", alignItems: "center" }}>
           {navItems.map((item) => (
             <button 
               key={item.id} 
@@ -521,6 +531,7 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
       <style>{`
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
+          .logo-container { display: none !important; }
           .mobile-toggle { 
             display: block !important;
             position: absolute;
@@ -529,7 +540,8 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
             transform: translateY(-50%);
           }
           .header-container {
-             justify-content: center !important;
+             justify-content: flex-end !important;
+             min-height: 40px;
           }
         }
       `}</style>
@@ -541,7 +553,7 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
   const content = useContent();
   
   return (
-    <section id="home" style={{ position: "relative", minHeight: "90vh", display: "flex", alignItems: "center", paddingTop: "100px" }}>
+    <section id="home" className="app-page-offset" style={{ position: "relative", minHeight: "90vh", display: "flex", alignItems: "center" }}>
       {/* Background with Argyle Pattern */}
       <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, zIndex: -1 }}></div>
       <div style={{ 
@@ -895,7 +907,7 @@ const CommunityPage = () => {
   const page = content.communityPage;
 
   return (
-    <div style={{ paddingTop: '100px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+    <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       {/* Header */}
       <div style={{ backgroundColor: COLORS.navy, padding: '60px 0 40px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
@@ -952,7 +964,7 @@ const AboutPage = () => {
   const page = content.about.page;
 
   return (
-    <div style={{ paddingTop: '100px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+    <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       {/* Header */}
       <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
@@ -1053,7 +1065,7 @@ interface InventoryPageProps {
 
 const InventoryPage: React.FC<InventoryPageProps> = ({ title, subtitle, items }) => {
   return (
-    <div style={{ paddingTop: '100px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+    <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       <div style={{ backgroundColor: COLORS.navy, padding: '80px 0', color: COLORS.white, marginBottom: '60px', position: 'relative' }}>
          <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
          <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
@@ -1088,7 +1100,7 @@ const ContactPage = () => {
   const page = content.contactPage;
 
   return (
-    <div style={{ paddingTop: '100px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+    <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       <div style={{ backgroundColor: COLORS.navy, padding: '80px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
         <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
