@@ -549,6 +549,10 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
           bottom: 0;
           width: 260px;
           background-color: ${COLORS.carolinaBlue};
+          background-image: 
+            linear-gradient(135deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent),
+            linear-gradient(225deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+          background-size: 40px 60px; /* Tall diamonds for Argyle effect */
           padding: 40px 20px;
           display: flex;
           flex-direction: column;
@@ -1071,11 +1075,11 @@ const CommunityPage = () => {
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       {/* Header */}
-      <div style={{ backgroundColor: COLORS.navy, padding: '60px 0 40px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
         <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '12px' }}>{page.title}</h1>
-          <p style={{ fontSize: '1.1rem', color: COLORS.carolinaBlue }}>{page.subtitle}</p>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{page.title}</h1>
+          <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue }}>{page.subtitle}</p>
         </div>
       </div>
 
@@ -1228,11 +1232,11 @@ interface InventoryPageProps {
 const InventoryPage: React.FC<InventoryPageProps> = ({ title, subtitle, items }) => {
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
-      <div style={{ backgroundColor: COLORS.navy, padding: '80px 0', color: COLORS.white, marginBottom: '60px', position: 'relative' }}>
+      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative' }}>
          <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
          <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
-            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '16px' }}>{title}</h1>
-            <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue }}>{subtitle}</p>
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{title}</h1>
+            <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue, maxWidth: '600px', margin: '0 auto' }}>{subtitle}</p>
          </div>
       </div>
 
@@ -1263,7 +1267,7 @@ const ContactPage = () => {
 
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
-      <div style={{ backgroundColor: COLORS.navy, padding: '80px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
         <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{page.title}</h1>
