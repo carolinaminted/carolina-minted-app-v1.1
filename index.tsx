@@ -213,17 +213,11 @@ const styles = {
     ::-webkit-scrollbar-thumb { background: ${COLORS.carolinaBlue}; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: ${COLORS.navy}; }
 
-    /* Argyle Pattern Background */
+    /* Argyle Pattern Background (Seamless SVG) */
     .argyle-bg {
       background-color: ${COLORS.carolinaBlue};
-      background-image: 
-        linear-gradient(45deg, ${COLORS.navy} 12.5%, transparent 12.5%, transparent 87.5%, ${COLORS.navy} 87.5%, ${COLORS.navy}),
-        linear-gradient(135deg, ${COLORS.navy} 12.5%, transparent 12.5%, transparent 87.5%, ${COLORS.navy} 87.5%, ${COLORS.navy}),
-        linear-gradient(45deg, ${COLORS.navy} 12.5%, transparent 12.5%, transparent 87.5%, ${COLORS.navy} 87.5%, ${COLORS.navy}),
-        linear-gradient(135deg, ${COLORS.navy} 12.5%, transparent 12.5%, transparent 87.5%, ${COLORS.navy} 87.5%, ${COLORS.navy});
-      background-size: 60px 60px;
-      background-position: 0 0, 0 0, 30px 30px, 30px 30px;
-      opacity: 1;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='100' viewBox='0 0 60 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 50-30 50L0 50z' fill='%2313294B' fill-opacity='0.1'/%3E%3C/svg%3E");
+      background-size: 60px 100px;
     }
     
     .argyle-overlay {
@@ -549,10 +543,8 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
           bottom: 0;
           width: 260px;
           background-color: ${COLORS.carolinaBlue};
-          background-image: 
-            linear-gradient(135deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent),
-            linear-gradient(225deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-          background-size: 40px 60px; /* Tall diamonds for Argyle effect */
+          background-image: url("data:image/svg+xml,%3Csvg width='60' height='100' viewBox='0 0 60 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 50-30 50L0 50z' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E");
+          background-size: 60px 100px;
           padding: 40px 20px;
           display: flex;
           flex-direction: column;
@@ -1232,7 +1224,7 @@ interface InventoryPageProps {
 const InventoryPage: React.FC<InventoryPageProps> = ({ title, subtitle, items }) => {
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
-      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative' }}>
+      <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
          <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
          <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{title}</h1>
