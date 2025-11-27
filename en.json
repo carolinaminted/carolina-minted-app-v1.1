@@ -14,17 +14,17 @@
   },
   "hero": {
     "est": "Est. 2025 • Gastonia, NC",
-    "headlineStart": "Collectibles",
-    "headlineHighlight": "Born & Bred.",
-    "subtext": "Premium trading cards, memorabilia, and exclusive drops for the true fan. Certified authentic, delivered with Southern hospitality.",
-    "ctaPrimary": "Shop Latest Drop",
-    "ctaSecondary": "Join the Community"
+    "headlineStart": "Collect. Vault. Sell",
+    "headlineHighlight": "Buy. Hold. 💎🙌🚀",
+    "subtext": "Premium trading cards, memorabilia, and exclusive drops for the true collectors. Certified authentic, delivered with Southern hospitality.",
+    "ctaPrimary": "Latest adds to the vault",
+    "ctaSecondary": "Carolina Minted Community"
   },
   "features": {
     "items": [
       { 
-        "title": "Certified Authentic", 
-        "desc": "Every item is verified by our expert team or third-party graders.",
+        "title": "Authenticity Cards & Sealed Products", 
+        "desc": "Every item is verified by a team of experts or third-party graders.",
         "iconType": "shield"
       },
       { 

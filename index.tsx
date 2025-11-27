@@ -281,14 +281,33 @@ const styles = {
       margin-bottom: 6px;
     }
     
-    /* Page Offset for Fixed Header */
-    .app-page-offset {
-      padding-top: 100px;
+    /* Layout & Responsive Architecture */
+    
+    @media (min-width: 769px) {
+      /* Desktop: Sidebar Layout */
+      main, footer {
+        margin-left: 260px; /* Sidebar width */
+        width: calc(100% - 260px);
+      }
+      
+      .app-page-offset {
+        padding-top: 0;
+      }
+
+      .hero-est-badge {
+        display: none !important;
+      }
     }
     
     @media (max-width: 768px) {
+      /* Mobile: Top Header Layout */
+      main, footer {
+        margin-left: 0;
+        width: 100%;
+      }
+      
       .app-page-offset {
-        padding-top: 80px;
+        padding-top: 70px; /* Reduced header height */
       }
     }
 
@@ -419,154 +438,276 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
   };
 
   return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: COLORS.carolinaBlue,
-        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-        zIndex: 1000,
-        padding: "12px 0",
-      }}
-    >
-      <div className="header-container" style={{ ...styles.container, display: "flex", justifyContent: "space-between", alignItems: "center", position: 'relative', minHeight: '60px' }}>
-        
-        {/* Unified Logo Container */}
+    <>
+      {/* Desktop Sidebar Navigation (Visible on Desktop) */}
+      <aside className="desktop-sidebar">
         <div 
-          className="logo-container"
+          className="sidebar-logo-container"
           onClick={() => handleNavClick('home')}
-          style={{ 
-            cursor: 'pointer', 
-            zIndex: 10,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '0.8' }}>
-            <span style={{ 
-              fontFamily: "'Graduate', serif", 
-              fontSize: "1.6rem", 
-              color: COLORS.carolinaBlue,
-              textShadow: `2px 2px 0 ${COLORS.navy}, -1px -1px 0 ${COLORS.navy}, 1px -1px 0 ${COLORS.navy}, -1px 1px 0 ${COLORS.navy}, 1px 1px 0 ${COLORS.navy}`,
-              letterSpacing: '0.05em'
-            }}>CAROLINA</span>
-            <span style={{ 
-              fontFamily: "'Graduate', serif", 
-              fontSize: "1.6rem", 
-              color: COLORS.carolinaBlue,
-              textShadow: `2px 2px 0 ${COLORS.navy}, -1px -1px 0 ${COLORS.navy}, 1px -1px 0 ${COLORS.navy}, -1px 1px 0 ${COLORS.navy}, 1px 1px 0 ${COLORS.navy}`,
-              letterSpacing: '0.05em'
-            }}>MINTED</span>
-            <span style={{ 
-              fontFamily: "'Graduate', serif", 
-              fontSize: "0.8rem", 
-              color: COLORS.navy, 
-              marginTop: '5px',
-              letterSpacing: '0.2em'
-            }}>COLLECTIBLES</span>
+            <span className="brand-main">CAROLINA</span>
+            <span className="brand-main">MINTED</span>
+            <span className="brand-sub">COLLECTIBLES</span>
+          </div>
+
+          <div style={{ 
+            marginTop: '12px', 
+            fontSize: '0.75rem', 
+            fontWeight: '600', 
+            color: 'rgba(19, 41, 75, 0.7)', 
+            fontFamily: "'Inter', sans-serif",
+            letterSpacing: '0.05em'
+          }}>
+            {content.hero.est}
           </div>
         </div>
 
-        {/* Desktop Nav */}
-        <nav className="desktop-nav" style={{ display: window.innerWidth > 768 ? "flex" : "none", gap: "32px", alignItems: "center" }}>
+        <nav className="sidebar-nav">
           {navItems.map((item) => (
             <button 
               key={item.id} 
               type="button"
+              className="sidebar-link"
               onClick={() => handleNavClick(item.id)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "0.95rem", fontFamily: 'inherit' }}>
+            >
               {item.label}
             </button>
           ))}
           <button 
             type="button"
+            className="sidebar-link sidebar-cta"
             onClick={() => handleNavClick('contact')}
-            style={{ 
-              background: COLORS.navy, 
-              border: "none", 
-              cursor: "pointer", 
-              color: "white", 
-              padding: "8px 16px", 
-              borderRadius: "4px",
-              fontWeight: "600",
-              fontSize: "0.9rem"
-            }}>
+          >
             {content.nav.contact}
           </button>
-          <button type="button" style={{ background: "none", border: "none", cursor: "pointer", color: COLORS.navy }}>
-            <Icons.ShoppingBag />
-          </button>
         </nav>
-
-        {/* Mobile Menu Toggle */}
-        <button 
-          type="button"
-          className="mobile-toggle"
-          onClick={() => setIsOpen(!isOpen)} 
-          style={{ display: "none", background: "none", border: "none", color: COLORS.navy, cursor: "pointer" }}
-        >
-          {isOpen ? <Icons.X /> : <Icons.Menu />}
-        </button>
-      </div>
-
-      {/* Mobile Nav */}
-      {isOpen && (
-        <div style={{
-          position: "absolute",
-          top: "100%",
-          left: 0,
-          right: 0,
-          backgroundColor: "white",
-          padding: "20px",
-          boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-        }}>
-          {navItems.map((item) => (
-            <button 
-              key={item.id} 
-              type="button"
-              onClick={() => handleNavClick(item.id)}
-              style={{ background: 'none', border: 'none', textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "1.1rem", textAlign: "center", fontFamily: 'inherit' }}
-            >
-              {item.label}
-            </button>
-          ))}
-           <button 
-              type="button"
-              onClick={() => handleNavClick('contact')}
-              style={{ background: 'none', border: 'none', textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "1.1rem", textAlign: "center", fontFamily: 'inherit' }}
-            >
-              {content.nav.contact}
-            </button>
+        
+        <div className="sidebar-footer">
+           <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>© 2025 CMC</div>
         </div>
-      )}
+      </aside>
+
+      {/* Mobile Compact Header (Visible on Mobile) */}
+      <header className="mobile-header">
+        <div className="header-container" style={{ ...styles.container, position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
+          
+          {/* Centered Mobile Logo */}
+          <div 
+            className="logo-container"
+            onClick={() => handleNavClick('home')}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '0.8' }}>
+              <span className="brand-main mobile-brand-main">CAROLINA</span>
+              <span className="brand-main mobile-brand-main">MINTED</span>
+              <span className="brand-sub mobile-brand-sub">COLLECTIBLES</span>
+            </div>
+          </div>
+
+          {/* Mobile Menu Toggle (Right Aligned) */}
+          <div style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)' }}>
+            <button 
+              type="button"
+              className="mobile-toggle"
+              onClick={() => setIsOpen(!isOpen)} 
+            >
+              {isOpen ? <Icons.X /> : <Icons.Menu />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Nav Dropdown */}
+        {isOpen && (
+          <div className="mobile-dropdown">
+            {navItems.map((item) => (
+              <button 
+                key={item.id} 
+                type="button"
+                className="mobile-nav-item"
+                onClick={() => handleNavClick(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+             <button 
+                type="button"
+                className="mobile-nav-item"
+                onClick={() => handleNavClick('contact')}
+              >
+                {content.nav.contact}
+              </button>
+          </div>
+        )}
+      </header>
       
       <style>{`
+        /* --- Sidebar Styles (Desktop) --- */
+        .desktop-sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: 260px;
+          background-color: ${COLORS.carolinaBlue};
+          padding: 40px 20px;
+          display: flex;
+          flex-direction: column;
+          z-index: 1000;
+          box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+          overflow-y: auto;
+        }
+
+        .sidebar-logo-container {
+          cursor: pointer;
+          margin-bottom: 60px;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .sidebar-nav {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          flex: 1;
+        }
+
+        .sidebar-link {
+          background: none;
+          border: none;
+          cursor: pointer;
+          text-align: left;
+          color: ${COLORS.navy};
+          font-weight: 700;
+          font-size: 1.1rem;
+          padding: 12px 16px;
+          border-radius: 8px;
+          transition: all 0.2s ease;
+          font-family: 'Inter', sans-serif;
+        }
+
+        .sidebar-link:hover {
+          background-color: rgba(19, 41, 75, 0.1);
+          padding-left: 24px;
+        }
+
+        .sidebar-cta {
+          margin-top: 20px;
+          background-color: ${COLORS.navy};
+          color: white;
+          text-align: center;
+        }
+        .sidebar-cta:hover {
+          background-color: #0F2240;
+          padding-left: 16px; /* Reset padding shift for CTA */
+          transform: translateY(-2px);
+        }
+
+        .sidebar-footer {
+          margin-top: 40px;
+          text-align: center;
+          color: ${COLORS.navy};
+        }
+
+        /* Branding Text Styles */
+        .brand-main {
+          font-family: 'Graduate', serif;
+          font-size: 2.5rem; /* Large for Sidebar */
+          color: ${COLORS.carolinaBlue};
+          text-shadow: 3px 3px 0 ${COLORS.navy}, -1px -1px 0 ${COLORS.navy}, 1px -1px 0 ${COLORS.navy}, -1px 1px 0 ${COLORS.navy}, 1px 1px 0 ${COLORS.navy};
+          letter-spacing: 0.05em;
+        }
+        .brand-sub {
+          font-family: 'Graduate', serif;
+          font-size: 1rem;
+          color: ${COLORS.navy};
+          margin-top: 8px;
+          letter-spacing: 0.25em;
+        }
+
+        /* --- Mobile Header Styles --- */
+        .mobile-header {
+          display: none; /* Hidden by default (Desktop) */
+        }
+        
         @media (max-width: 768px) {
-          .desktop-nav { display: none !important; }
-          .mobile-toggle { 
-            display: block !important;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
+          .desktop-sidebar {
+            display: none;
           }
-          .header-container {
-             justify-content: center !important; /* Helps centering, but absolute positioning is safer for true center */
+
+          .mobile-header {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px; /* Reduced compact height */
+            background-color: ${COLORS.carolinaBlue};
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
           }
+
           .logo-container {
             position: absolute;
             left: 50%;
-            transform: translateX(-50%);
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+          }
+          .logo-container > div {
+             pointer-events: auto;
+          }
+
+          /* Scaled down logo for compact mobile header */
+          .mobile-brand-main {
+            font-size: 1.8rem; 
+            text-shadow: 2px 2px 0 ${COLORS.navy}, -1px -1px 0 ${COLORS.navy}, 1px -1px 0 ${COLORS.navy}, -1px 1px 0 ${COLORS.navy}, 1px 1px 0 ${COLORS.navy};
+          }
+          .mobile-brand-sub {
+            font-size: 0.7rem;
+            margin-top: 4px;
+          }
+
+          .mobile-toggle {
+             background: none;
+             border: none;
+             color: ${COLORS.navy};
+             cursor: pointer;
+             display: block;
+          }
+
+          .mobile-dropdown {
+            position: absolute;
+            top: 70px; /* Matches header height */
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border-top: 1px solid ${COLORS.carolinaBlue};
+          }
+
+          .mobile-nav-item {
+             background: none;
+             border: none;
+             text-decoration: none;
+             color: ${COLORS.navy};
+             font-weight: 600;
+             font-size: 1.1rem;
+             text-align: center;
+             font-family: inherit;
+             padding: 10px;
           }
         }
       `}</style>
-    </header>
+    </>
   );
 };
 
@@ -574,7 +715,7 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
   const content = useContent();
   
   return (
-    <section id="home" className="app-page-offset" style={{ position: "relative", minHeight: "90vh", display: "flex", alignItems: "center" }}>
+    <section id="home" className="app-page-offset" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center" }}>
       {/* Background with Argyle Pattern */}
       <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, zIndex: -1 }}></div>
       <div style={{ 
@@ -591,7 +732,7 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
 
       <div style={styles.container}>
         <div className="hero-content" style={{ maxWidth: "600px" }}>
-          <div style={{ 
+          <div className="hero-est-badge" style={{ 
             display: "inline-block", 
             padding: "6px 12px", 
             backgroundColor: "rgba(19, 41, 75, 0.1)", 
