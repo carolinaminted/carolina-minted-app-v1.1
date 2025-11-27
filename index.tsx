@@ -194,7 +194,7 @@ const getIconByName = (name: string) => {
 // --- Styles (CSS-in-JS) ---
 const styles = {
   global: `
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Graduate&family=Inter:wght@300;400;500;600;700;800&display=swap');
     
     body, html {
       margin: 0;
@@ -280,18 +280,20 @@ const styles = {
       color: ${COLORS.navy};
       margin-bottom: 6px;
     }
-
+    
     /* Page Offset for Fixed Header */
     .app-page-offset {
       padding-top: 100px;
     }
+    
+    @media (max-width: 768px) {
+      .app-page-offset {
+        padding-top: 80px;
+      }
+    }
 
     /* Mobile Responsive Styles */
     @media (max-width: 768px) {
-      .app-page-offset {
-        padding-top: 80px; /* Reduces padding on mobile to match smaller header height */
-      }
-
       .hero-content {
         text-align: center;
         margin-left: auto !important;
@@ -426,34 +428,50 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
         backgroundColor: COLORS.carolinaBlue,
         boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
         zIndex: 1000,
-        padding: "20px 0",
+        padding: "12px 0",
       }}
     >
-      <div className="header-container" style={{ ...styles.container, display: "flex", justifyContent: "space-between", alignItems: "center", position: 'relative' }}>
-        {/* Logo */}
+      <div className="header-container" style={{ ...styles.container, display: "flex", justifyContent: "space-between", alignItems: "center", position: 'relative', minHeight: '60px' }}>
+        
+        {/* Unified Logo Container */}
         <div 
           className="logo-container"
           onClick={() => handleNavClick('home')}
-          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+          style={{ 
+            cursor: 'pointer', 
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
-          <img 
-            src="https://raw.githubusercontent.com/carolinaminted/carolina-minted-web-app/main/logo-argyle-small.png" 
-            alt="Carolina Minted Logo" 
-            style={{ 
-              height: '60px', 
-              width: 'auto',
-              objectFit: 'contain'
-            }} 
-          />
-          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '6px' }}>
-             <span style={{ fontSize: "1.25rem", fontWeight: "800", color: COLORS.navy, letterSpacing: "0.1em", lineHeight: "1" }}>{content.common.brandName}</span>
-             <span style={{ fontSize: "1.25rem", fontWeight: "300", color: "white", letterSpacing: "0.45em", lineHeight: "1" }}>{content.common.brandSuffix}</span>
-             <span style={{ fontSize: "0.75rem", fontWeight: "600", color: COLORS.navy, letterSpacing: "0.22em", marginTop: "2px", textTransform: "uppercase", lineHeight: "1.2" }}>Collectibles</span>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '0.8' }}>
+            <span style={{ 
+              fontFamily: "'Graduate', serif", 
+              fontSize: "1.6rem", 
+              color: COLORS.carolinaBlue,
+              textShadow: `2px 2px 0 ${COLORS.navy}, -1px -1px 0 ${COLORS.navy}, 1px -1px 0 ${COLORS.navy}, -1px 1px 0 ${COLORS.navy}, 1px 1px 0 ${COLORS.navy}`,
+              letterSpacing: '0.05em'
+            }}>CAROLINA</span>
+            <span style={{ 
+              fontFamily: "'Graduate', serif", 
+              fontSize: "1.6rem", 
+              color: COLORS.carolinaBlue,
+              textShadow: `2px 2px 0 ${COLORS.navy}, -1px -1px 0 ${COLORS.navy}, 1px -1px 0 ${COLORS.navy}, -1px 1px 0 ${COLORS.navy}, 1px 1px 0 ${COLORS.navy}`,
+              letterSpacing: '0.05em'
+            }}>MINTED</span>
+            <span style={{ 
+              fontFamily: "'Graduate', serif", 
+              fontSize: "0.8rem", 
+              color: COLORS.navy, 
+              marginTop: '5px',
+              letterSpacing: '0.2em'
+            }}>COLLECTIBLES</span>
           </div>
         </div>
 
         {/* Desktop Nav */}
-        <nav className="desktop-nav" style={{ display: "flex", gap: "32px", alignItems: "center" }}>
+        <nav className="desktop-nav" style={{ display: window.innerWidth > 768 ? "flex" : "none", gap: "32px", alignItems: "center" }}>
           {navItems.map((item) => (
             <button 
               key={item.id} 
@@ -531,7 +549,6 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
       <style>{`
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
-          .logo-container { display: none !important; }
           .mobile-toggle { 
             display: block !important;
             position: absolute;
@@ -540,8 +557,12 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
             transform: translateY(-50%);
           }
           .header-container {
-             justify-content: flex-end !important;
-             min-height: 40px;
+             justify-content: center !important; /* Helps centering, but absolute positioning is safer for true center */
+          }
+          .logo-container {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
           }
         }
       `}</style>
