@@ -174,7 +174,7 @@
     "feed": [
       {
         "id": "p1",
-        "author": "Carolina Minted",
+        "author": "Carolina Minted Collectibles",
         "authorInitials": "CM",
         "time": "2h ago",
         "text": "🚨 JUST IN: Huge PSA return day! We hit 85% Gem Mint 10s on this sub. This Umbreon VMAX is absolutely stunning in person. Listing it in the shop later tonight! 💎",
@@ -195,7 +195,7 @@
       },
       {
         "id": "p3",
-        "author": "Carolina Minted",
+        "author": "Carolina Minted Collectibles",
         "authorInitials": "CM",
         "time": "1d ago",
         "text": "Who is watching the game tonight? If UNC wins, we might just drop a surprise discount code. Stay tuned. 👀🏀 #TarHeels",
@@ -227,7 +227,7 @@
   },
   "footer": {
     "brandColumn": {
-      "title": "Carolina Minted",
+      "title": "Carolina Minted Collectibles",
       "text": "The premier destination for high-end sports collectibles in the Tar Heel State."
     },
     "shopColumn": {

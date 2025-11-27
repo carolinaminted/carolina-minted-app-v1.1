@@ -393,14 +393,7 @@ const useContent = () => {
 
 const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const content = useContent();
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const navItems = [
     { label: content.nav.home, id: 'home' },
@@ -421,15 +414,13 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
         top: 0,
         left: 0,
         right: 0,
-        backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "transparent",
-        backdropFilter: isScrolled ? "blur(10px)" : "none",
-        boxShadow: isScrolled ? "0 4px 6px -1px rgba(0, 0, 0, 0.1)" : "none",
-        transition: "all 0.3s ease",
+        backgroundColor: COLORS.carolinaBlue,
+        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
         zIndex: 1000,
         padding: "20px 0",
       }}
     >
-      <div style={{ ...styles.container, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div className="header-container" style={{ ...styles.container, display: "flex", justifyContent: "space-between", alignItems: "center", position: 'relative' }}>
         {/* Logo */}
         <div 
           onClick={() => handleNavClick('home')}
@@ -445,8 +436,9 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
             }} 
           />
           <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '6px' }}>
-             <span style={{ fontSize: "1.25rem", fontWeight: "800", color: COLORS.navy, letterSpacing: "-0.02em", lineHeight: "1" }}>{content.common.brandName}</span>
-             <span style={{ fontSize: "1.25rem", fontWeight: "300", color: COLORS.carolinaBlue, letterSpacing: "0.15em", lineHeight: "1" }}>{content.common.brandSuffix}</span>
+             <span style={{ fontSize: "1.25rem", fontWeight: "800", color: COLORS.navy, letterSpacing: "0.1em", lineHeight: "1" }}>{content.common.brandName}</span>
+             <span style={{ fontSize: "1.25rem", fontWeight: "300", color: "white", letterSpacing: "0.45em", lineHeight: "1" }}>{content.common.brandSuffix}</span>
+             <span style={{ fontSize: "0.75rem", fontWeight: "600", color: COLORS.navy, letterSpacing: "0.22em", marginTop: "2px", textTransform: "uppercase", lineHeight: "1.2" }}>Collectibles</span>
           </div>
         </div>
 
@@ -457,7 +449,7 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
               key={item.id} 
               type="button"
               onClick={() => handleNavClick(item.id)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', textDecoration: "none", color: COLORS.navy, fontWeight: "500", fontSize: "0.95rem", fontFamily: 'inherit' }}>
+              style={{ background: 'none', border: 'none', cursor: 'pointer', textDecoration: "none", color: COLORS.navy, fontWeight: "600", fontSize: "0.95rem", fontFamily: 'inherit' }}>
               {item.label}
             </button>
           ))}
@@ -529,7 +521,16 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
       <style>{`
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
-          .mobile-toggle { display: block !important; }
+          .mobile-toggle { 
+            display: block !important;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+          .header-container {
+             justify-content: center !important;
+          }
         }
       `}</style>
     </header>
@@ -540,7 +541,7 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
   const content = useContent();
   
   return (
-    <section id="home" style={{ position: "relative", minHeight: "90vh", display: "flex", alignItems: "center", paddingTop: "80px" }}>
+    <section id="home" style={{ position: "relative", minHeight: "90vh", display: "flex", alignItems: "center", paddingTop: "100px" }}>
       {/* Background with Argyle Pattern */}
       <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, zIndex: -1 }}></div>
       <div style={{ 
@@ -894,7 +895,7 @@ const CommunityPage = () => {
   const page = content.communityPage;
 
   return (
-    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+    <div style={{ paddingTop: '100px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       {/* Header */}
       <div style={{ backgroundColor: COLORS.navy, padding: '60px 0 40px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
@@ -951,7 +952,7 @@ const AboutPage = () => {
   const page = content.about.page;
 
   return (
-    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+    <div style={{ paddingTop: '100px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       {/* Header */}
       <div style={{ backgroundColor: COLORS.navy, padding: '100px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
@@ -1052,7 +1053,7 @@ interface InventoryPageProps {
 
 const InventoryPage: React.FC<InventoryPageProps> = ({ title, subtitle, items }) => {
   return (
-    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+    <div style={{ paddingTop: '100px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       <div style={{ backgroundColor: COLORS.navy, padding: '80px 0', color: COLORS.white, marginBottom: '60px', position: 'relative' }}>
          <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
          <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
@@ -1087,7 +1088,7 @@ const ContactPage = () => {
   const page = content.contactPage;
 
   return (
-    <div style={{ paddingTop: '80px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+    <div style={{ paddingTop: '100px', backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
       <div style={{ backgroundColor: COLORS.navy, padding: '80px 0 60px', color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
         <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
@@ -1286,6 +1287,7 @@ const App = () => {
 
   // Use useLayoutEffect to ensure scroll happens before paint
   useLayoutEffect(() => {
+    // Robust scroll to top logic for both window and document element
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
