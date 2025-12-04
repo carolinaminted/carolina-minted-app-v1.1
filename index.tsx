@@ -31,7 +31,7 @@ interface FeatureItem {
 
 interface NavContent {
   home: string;
-  shopDrops: string;
+  mintedShowcase: string;
   community: string;
   aboutUs: string;
   contact: string;
@@ -274,6 +274,14 @@ const styles = {
       color: ${COLORS.navy};
       margin-bottom: 6px;
     }
+
+    /* Hero Section Base */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
     
     /* Layout & Responsive Architecture */
     
@@ -286,10 +294,6 @@ const styles = {
       
       .app-page-offset {
         padding-top: 0;
-      }
-
-      .hero-est-badge {
-        display: none !important;
       }
 
       .page-header {
@@ -305,16 +309,21 @@ const styles = {
       }
       
       .app-page-offset {
-        padding-top: 70px; /* Reduced header height */
+        padding-top: 85px; /* Reduced header height */
       }
       
       .page-header {
         padding: 60px 0 40px;
       }
-    }
 
-    /* Mobile Responsive Styles */
-    @media (max-width: 768px) {
+      /* Hero Mobile Updates */
+      .hero-section {
+         min-height: auto;
+         padding-top: 135px; /* Overrides app-page-offset with desired gap */
+         padding-bottom: 60px;
+         align-items: flex-start;
+      }
+
       .hero-content {
         text-align: center;
         margin-left: auto !important;
@@ -429,7 +438,7 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
 
   const navItems = [
     { label: content.nav.home, id: 'home' },
-    { label: content.nav.shopDrops, id: 'shop' },
+    { label: content.nav.mintedShowcase, id: 'shop' },
     { label: content.nav.community, id: 'community' },
     { label: content.nav.aboutUs, id: 'about' },
   ];
@@ -503,6 +512,7 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
               <span className="brand-main mobile-brand-main">CAROLINA</span>
               <span className="brand-main mobile-brand-main">MINTED</span>
               <span className="brand-sub mobile-brand-sub">COLLECTIBLES</span>
+              <span className="mobile-est">{content.hero.est}</span>
             </div>
           </div>
 
@@ -646,8 +656,10 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
             top: 0;
             left: 0;
             right: 0;
-            height: 70px; /* Reduced compact height */
+            height: 85px; /* Compact height (increased for est line) */
             background-color: ${COLORS.carolinaBlue};
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='100' viewBox='0 0 60 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 50-30 50L0 50z' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E");
+            background-size: 60px 100px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             z-index: 1000;
           }
@@ -668,12 +680,22 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
 
           /* Scaled down logo for compact mobile header */
           .mobile-brand-main {
-            font-size: 1.8rem; 
+            font-size: 1.6rem; 
             text-shadow: 2px 2px 0 ${COLORS.navy}, -1px -1px 0 ${COLORS.navy}, 1px -1px 0 ${COLORS.navy}, -1px 1px 0 ${COLORS.navy}, 1px 1px 0 ${COLORS.navy};
           }
           .mobile-brand-sub {
             font-size: 0.7rem;
             margin-top: 4px;
+          }
+          .mobile-est {
+            font-size: 0.65rem;
+            color: ${COLORS.navy};
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            margin-top: 4px;
+            letter-spacing: 0.05em;
+            opacity: 0.85;
+            text-transform: uppercase;
           }
 
           .mobile-toggle {
@@ -686,7 +708,7 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
 
           .mobile-dropdown {
             position: absolute;
-            top: 70px; /* Matches header height */
+            top: 85px; /* Matches header height */
             left: 0;
             right: 0;
             background-color: white;
@@ -719,7 +741,7 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
   const content = useContent();
   
   return (
-    <section id="home" className="app-page-offset" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center" }}>
+    <section id="home" className="app-page-offset hero-section">
       {/* Background with Argyle Pattern */}
       <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, zIndex: -1 }}></div>
       <div style={{ 
@@ -736,25 +758,14 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
 
       <div style={styles.container}>
         <div className="hero-content" style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div className="hero-est-badge" style={{ 
-            display: "inline-block", 
-            padding: "6px 12px", 
-            backgroundColor: "rgba(19, 41, 75, 0.1)", 
-            color: COLORS.navy, 
-            borderRadius: "50px", 
-            fontSize: "0.875rem", 
-            fontWeight: "600", 
-            marginBottom: "24px", 
-            border: `1px solid rgba(19, 41, 75, 0.1)`
-          }}>
-            {content.hero.est}
-          </div>
+          
           <h1 style={{ 
             fontSize: "clamp(2.5rem, 5vw, 4.5rem)", 
             fontWeight: "800", 
             color: COLORS.navy, 
             lineHeight: "1.1", 
-            marginBottom: "24px" 
+            marginBottom: "24px",
+            marginTop: 0,
           }}>
             {content.hero.headlineStart} <br />
             <span style={{ color: COLORS.carolinaBlue }}>{content.hero.headlineHighlight}</span>

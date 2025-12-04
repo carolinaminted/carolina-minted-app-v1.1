@@ -7,7 +7,7 @@
   },
   "nav": {
     "home": "Home",
-    "shopDrops": "Shop Drops",
+    "mintedShowcase": "Minted Showcase",
     "community": "Community",
     "aboutUs": "About Us",
     "contact": "Contact"
@@ -40,8 +40,8 @@
     ]
   },
   "shop": {
-    "sectionTitle": "Latest Drops",
-    "pageTitle": "Shop Drops",
+    "sectionTitle": "Latest Showcase",
+    "pageTitle": "Minted Showcase",
     "sectionSubtitle": "Fresh from the vault. Secure your piece of history before they're gone.",
     "addToCart": "Add to Cart",
     "viewAllButton": "View All Inventory",
