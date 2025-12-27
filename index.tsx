@@ -9,7 +9,7 @@ interface InventoryItem {
   price: string;
   type: string;
   color: string;
-  image?: string; // Added image property
+  image?: string; // Can be a filename (prod_001.jpg) or a full URL
 }
 
 interface SocialPost {
@@ -960,7 +960,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color, im
       }}>
         {image ? (
            <img 
-             src={`./images/${image}`} 
+             // Updated logic to support HTTP URLs alongside local paths
+             src={image.startsWith('http') ? image : `./images/${image}`} 
              alt={title}
              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
            />
