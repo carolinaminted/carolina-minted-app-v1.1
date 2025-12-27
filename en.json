@@ -28,9 +28,9 @@
         "iconType": "shield"
       },
       { 
-        "title": "Lightning Fast Shipping", 
-        "desc": "Same-day processing on all orders placed before 2PM EST.",
-        "iconType": "zap"
+        "title": "Sealed Inventory", 
+        "desc": "We specialize in sealed Pokémon, Star Wars Unlimited, and Basketball product.",
+        "iconType": "box"
       },
       { 
         "title": "Mint Condition", 
@@ -40,9 +40,9 @@
     ]
   },
   "shop": {
-    "sectionTitle": "Latest Showcase",
+    "sectionTitle": "Collectr Portfolio",
     "pageTitle": "Minted Showcase",
-    "sectionSubtitle": "Fresh from the vault. Secure your piece of history before they're gone.",
+    "sectionSubtitle": "Track our live portfolio on Collectr including Pokémon and Star Wars Unlimited assets.",
     "addToCart": "Add to Cart",
     "viewAllButton": "View All Inventory",
     "inventory": [
@@ -51,42 +51,48 @@
         "title": "#23 Retro Rookie Card (Mint 10)",
         "price": "450.00",
         "type": "GRAIL",
-        "color": "gold"
+        "color": "gold",
+        "image": "prod_001.jpg"
       },
       {
         "id": "prod_002",
         "title": "Carolina Blue Hobby Box '24",
         "price": "120.00",
         "type": "SEALED",
-        "color": "blue"
+        "color": "blue",
+        "image": "prod_002.jpg"
       },
       {
         "id": "prod_003",
         "title": "Championship Court Floor Piece",
         "price": "85.00",
         "type": "MEMORABILIA",
-        "color": "blue"
+        "color": "blue",
+        "image": "prod_003.jpg"
       },
       {
         "id": "prod_004",
         "title": "Coach's Signature Series",
         "price": "299.00",
         "type": "AUTO",
-        "color": "gold"
+        "color": "gold",
+        "image": "prod_004.jpg"
       },
       {
         "id": "prod_005",
         "title": "Pikachu Illustrator Style (Holo)",
         "price": "950.00",
         "type": "POKEMON",
-        "color": "gold"
+        "color": "gold",
+        "image": "prod_005.jpg"
       },
       {
         "id": "prod_006",
         "title": "Galactic Empire Deck (Sealed)",
         "price": "55.00",
         "type": "STAR WARS",
-        "color": "blue"
+        "color": "blue",
+        "image": "prod_006.jpg"
       }
     ]
   },
@@ -139,9 +145,6 @@
     ]
   },
   "about": {
-    "initials": "CM",
-    "sectionTitle": "Preserving History.",
-    "sectionText": "Carolina Minted Collectibles isn't just a shop; it's a tribute to the legends who paved the way. We source the finest cards and memorabilia with a focus on North Carolina sports history.",
     "page": {
       "header": "Our Mission",
       "missionStatement": "Carolina Minted Collectibles' mission is to build lasting value for collectors and investors by strategically acquiring, curating, and trading high-grade Pokémon and sports collectibles. We focus on assets with long-term growth potential, navigating market dynamics to secure scarcity and capitalize on opportunities for future generations.",
@@ -167,6 +170,32 @@
         "Long-Term Focus – We're building a business for the next generation of collectors"
       ]
     }
+  },
+  "faqPage": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Common questions about our vault, shipping, and grading standards.",
+    "items": [
+      {
+        "question": "How do you ensure the authenticity of your cards?",
+        "answer": "We take authenticity seriously. Our raw inventory is inspected by experts, and our graded cards are exclusively from top-tier services like PSA, BGS, and SGC. We stand behind every item we sell."
+      },
+      {
+        "question": "What is your shipping policy?",
+        "answer": "We treat every package like a grail. Slabs are sleeved and bubble-wrapped; raw cards are secured in top loaders and team bags. All orders are shipped in sturdy boxes to prevent damage during transit."
+      },
+      {
+        "question": "Do you accept returns?",
+        "answer": "Due to the volatile nature of the collectibles market, all sales on graded cards and sealed wax are final. However, if there is an error with your order, please contact us immediately so we can make it right."
+      },
+      {
+        "question": "Can I sell my collection to Carolina Minted?",
+        "answer": "Yes! We are always looking to acquire high-grade vintage sports and modern TCG collections. Use our Contact page to send us a list or photos of what you're looking to sell."
+      },
+      {
+        "question": "Do you ship internationally?",
+        "answer": "Currently, we only ship within the United States. We are working on expanding our logistics to serve the global collecting community in the near future."
+      }
+    ]
   },
   "communityPage": {
     "title": "The Huddle",
@@ -219,12 +248,6 @@
       "submit": "Send Message"
     }
   },
-  "newsletter": {
-    "title": "Don't Miss the Next Drop",
-    "text": "Join the VIP list for early access to new arrivals and exclusive discounts.",
-    "placeholder": "Enter your email address",
-    "button": "Subscribe"
-  },
   "footer": {
     "brandColumn": {
       "title": "Carolina Minted Collectibles",
@@ -232,11 +255,11 @@
     },
     "shopColumn": {
       "title": "Shop",
-      "links": ["New Arrivals", "Best Sellers", "Graded Cards", "Memorabilia"]
+      "links": ["Minted Showcase", "Memorabilia"]
     },
     "supportColumn": {
       "title": "Support",
-      "links": ["FAQ", "Shipping & Returns", "Authenticity Guarantee", "Contact Us"]
+      "links": ["FAQ", "Authenticity Guarantee", "Contact Us"]
     },
     "copyright": "© 2025 Carolina Minted Collectibles, LLC. All rights reserved."
   }

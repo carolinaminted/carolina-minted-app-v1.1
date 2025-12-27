@@ -9,6 +9,7 @@ interface InventoryItem {
   price: string;
   type: string;
   color: string;
+  image?: string; // Added image property
 }
 
 interface SocialPost {
@@ -77,6 +78,17 @@ interface AboutPageContent {
   whyChooseUsList: string[];
 }
 
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface FAQPageContent {
+  title: string;
+  subtitle: string;
+  items: FAQItem[];
+}
+
 interface ContactPageContent {
   title: string;
   subtitle: string;
@@ -95,13 +107,6 @@ interface CommunityPageContent {
   title: string;
   subtitle: string;
   feed: SocialPost[];
-}
-
-interface NewsletterContent {
-  title: string;
-  text: string;
-  placeholder: string;
-  button: string;
 }
 
 interface FooterContent {
@@ -124,14 +129,11 @@ interface AppContent {
   shop: ShopContent;
   memorabiliaPage: MemorabiliaContent;
   about: {
-    initials: string;
-    sectionTitle: string;
-    sectionText: string;
     page: AboutPageContent;
   };
+  faqPage: FAQPageContent;
   communityPage: CommunityPageContent;
   contactPage: ContactPageContent;
-  newsletter: NewsletterContent;
   footer: FooterContent;
 }
 
@@ -165,6 +167,12 @@ const Icons = {
   Zap: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={COLORS.carolinaBlue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
   ),
+  Box: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={COLORS.carolinaBlue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+  ),
+  Chart: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={COLORS.carolinaBlue} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+  ),
   Check: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={COLORS.carolinaBlue} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
   ),
@@ -179,6 +187,12 @@ const Icons = {
   ),
   Share: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+  ),
+  ArrowRight: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+  ),
+  ChevronDown: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
   )
 };
 
@@ -187,6 +201,7 @@ const getIconByName = (name: string) => {
     case 'shield': return <Icons.Shield />;
     case 'star': return <Icons.Star />;
     case 'zap': return <Icons.Zap />;
+    case 'box': return <Icons.Box />;
     default: return <Icons.Star />;
   }
 };
@@ -283,6 +298,15 @@ const styles = {
       align-items: center;
     }
     
+    /* Features Grid System */
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
     /* Layout & Responsive Architecture */
     
     @media (min-width: 769px) {
@@ -298,6 +322,11 @@ const styles = {
 
       .page-header {
         padding: 30px 0 30px;
+      }
+
+      /* Desktop: Enforce 2x2 Grid for Features */
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
     
@@ -801,17 +830,17 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
   );
 };
 
-const Features = () => {
+const Features = ({ onShopClick }: { onShopClick: () => void }) => {
   const content = useContent();
+
+  const handlePortfolioClick = () => {
+    window.open("https://app.getcollectr.com/showcase/profile/7475de2d-97ff-4c25-b038-bc3317736824", "_blank");
+  };
 
   return (
     <section style={{ backgroundColor: COLORS.white, ...styles.section }}>
       <div style={styles.container}>
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", 
-          gap: "40px" 
-        }}>
+        <div className="features-grid">
           {content.features.items.map((f, i) => (
             <div key={i} className="feature-card" style={{ 
               padding: "32px", 
@@ -843,6 +872,51 @@ const Features = () => {
               <p style={{ color: "#6B7280", lineHeight: "1.6" }}>{f.desc}</p>
             </div>
           ))}
+
+          {/* New Compact Showcase Tile (4th Grid Item) */}
+          <div 
+            onClick={handlePortfolioClick}
+            className="feature-card showcase-card-tile"
+            style={{ 
+              padding: "32px", 
+              borderRadius: "16px", 
+              backgroundColor: COLORS.offWhite,
+              border: `1px solid ${COLORS.lightGray}`,
+              transition: "transform 0.2s ease",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              cursor: "pointer",
+              position: 'relative'
+            }}
+            onMouseEnter={(e) => {
+                 e.currentTarget.style.transform = "translateY(-5px)";
+            }}
+            onMouseLeave={(e) => {
+                 e.currentTarget.style.transform = "translateY(0)";
+            }}
+          >
+              <div style={{ 
+                width: "48px", 
+                height: "48px", 
+                backgroundColor: "rgba(123, 175, 212, 0.15)", 
+                borderRadius: "12px", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                marginBottom: "20px"
+              }}>
+                <Icons.Chart />
+              </div>
+              <h3 style={{ fontSize: "1.25rem", fontWeight: "700", color: COLORS.navy, marginBottom: "12px" }}>
+                  {content.shop.sectionTitle}
+              </h3>
+              <p style={{ color: "#6B7280", lineHeight: "1.6", marginBottom: "20px" }}>
+                  {content.shop.sectionSubtitle}
+              </p>
+          </div>
+
         </div>
       </div>
     </section>
@@ -854,9 +928,10 @@ interface ProductCardProps {
   price: string;
   type: string;
   color: string;
+  image?: string; // Added image property
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color, image }) => {
   const content = useContent();
   return (
     <article style={{ 
@@ -873,7 +948,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color }) 
     }}
     className="product-card"
     >
-      {/* Product Image Placeholder */}
+      {/* Product Image Placeholder or Image */}
       <div style={{ 
         height: "280px", 
         backgroundColor: "#F3F4F6", 
@@ -883,29 +958,39 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color }) 
         justifyContent: "center",
         overflow: "hidden"
       }}>
-        <div style={{
-          position: 'absolute', inset: 0, opacity: 0.1,
-          backgroundImage: `repeating-linear-gradient(45deg, ${COLORS.navy} 0, ${COLORS.navy} 1px, transparent 0, transparent 50%)`,
-          backgroundSize: '10px 10px'
-        }}></div>
-        
-        <div style={{
-          width: "160px",
-          height: "220px",
-          backgroundColor: color === 'gold' ? '#FCD34D' : COLORS.carolinaBlue,
-          borderRadius: "8px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
-          transform: "rotate(-5deg)",
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '10px',
-          border: '4px solid white'
-        }}>
-            <div style={{ width: '100%', height: '50%', background: 'rgba(255,255,255,0.3)', borderRadius: '4px 4px 0 0' }}></div>
-            <div style={{ width: '60%', height: '40%', background: COLORS.navy, borderRadius: '50%', marginTop: '-20px', border: '2px solid white' }}></div>
-        </div>
+        {image ? (
+           <img 
+             src={`./images/${image}`} 
+             alt={title}
+             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+           />
+        ) : (
+          <>
+            <div style={{
+              position: 'absolute', inset: 0, opacity: 0.1,
+              backgroundImage: `repeating-linear-gradient(45deg, ${COLORS.navy} 0, ${COLORS.navy} 1px, transparent 0, transparent 50%)`,
+              backgroundSize: '10px 10px'
+            }}></div>
+            
+            <div style={{
+              width: "160px",
+              height: "220px",
+              backgroundColor: color === 'gold' ? '#FCD34D' : COLORS.carolinaBlue,
+              borderRadius: "8px",
+              boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
+              transform: "rotate(-5deg)",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px',
+              border: '4px solid white'
+            }}>
+                <div style={{ width: '100%', height: '50%', background: 'rgba(255,255,255,0.3)', borderRadius: '4px 4px 0 0' }}></div>
+                <div style={{ width: '60%', height: '40%', background: COLORS.navy, borderRadius: '50%', marginTop: '-20px', border: '2px solid white' }}></div>
+            </div>
+          </>
+        )}
         
         <div style={{ 
           position: "absolute", 
@@ -930,48 +1015,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color }) 
         </div>
       </div>
     </article>
-  );
-};
-
-const ShopSection = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
-  const content = useContent();
-  const previewInventory = content.shop.inventory.slice(0, 4);
-
-  return (
-    <section id="shop-preview" style={{ ...styles.section, backgroundColor: COLORS.offWhite }}>
-      <div style={styles.container}>
-        <div style={{ textAlign: "center", marginBottom: "60px" }}>
-          <h2 style={{ fontSize: "2.5rem", fontWeight: "800", color: COLORS.navy, marginBottom: "16px" }}>{content.shop.sectionTitle}</h2>
-          <p style={{ color: "#6B7280", maxWidth: "600px", margin: "0 auto" }}>{content.shop.sectionSubtitle}</p>
-        </div>
-
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
-          gap: "32px" 
-        }}>
-          {previewInventory.map((item) => (
-             <ProductCard 
-                key={item.id}
-                title={item.title} 
-                price={item.price} 
-                type={item.type} 
-                color={item.color} 
-             />
-          ))}
-        </div>
-        
-        <div style={{ textAlign: 'center', marginTop: '60px' }}>
-            <button 
-              type="button"
-              onClick={() => onNavigate('shop')}
-              style={{...styles.button.outline, padding: "16px 48px"}}
-            >
-              {content.shop.viewAllButton}
-            </button>
-        </div>
-      </div>
-    </section>
   );
 };
 
@@ -1272,7 +1315,73 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ title, subtitle, items })
                 price={item.price} 
                 type={item.type} 
                 color={item.color} 
+                image={item.image} // Pass image prop here
              />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const FAQPage = () => {
+  const content = useContent();
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const toggleFAQ = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
+       {/* Reuse Header Style */}
+       <div className="page-header" style={{ backgroundColor: COLORS.navy, color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
+        <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
+        <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{content.faqPage.title}</h1>
+          <p style={{ fontSize: '1.2rem', color: COLORS.carolinaBlue, maxWidth: '600px', margin: '0 auto' }}>{content.faqPage.subtitle}</p>
+        </div>
+      </div>
+
+      <div style={{ ...styles.container, padding: '60px 20px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {content.faqPage.items.map((item, index) => (
+            <div key={index} style={{ 
+              backgroundColor: COLORS.white, 
+              borderRadius: '12px', 
+              overflow: 'hidden',
+              border: `1px solid ${COLORS.lightGray}`,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+            }}>
+              <button 
+                onClick={() => toggleFAQ(index)}
+                style={{
+                  width: '100%',
+                  padding: '24px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  textAlign: 'left'
+                }}
+              >
+                <span style={{ fontSize: '1.1rem', fontWeight: '700', color: COLORS.navy }}>{item.question}</span>
+                <span style={{ 
+                  color: COLORS.carolinaBlue, 
+                  transform: openIndex === index ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.3s ease'
+                }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </button>
+              {openIndex === index && (
+                <div style={{ padding: '0 24px 24px', color: '#4B5563', lineHeight: '1.6' }}>
+                  {item.answer}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
@@ -1358,59 +1467,21 @@ const ContactPage = () => {
   );
 };
 
-const Newsletter = () => {
-  const content = useContent();
-
-  return (
-    <section id="newsletter" style={{ padding: "100px 0", backgroundColor: COLORS.carolinaBlue }}>
-      <div style={styles.container}>
-         <div style={{ 
-           backgroundColor: COLORS.white, 
-           borderRadius: "24px", 
-           padding: "40px", 
-           textAlign: "center",
-           boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
-           maxWidth: "800px",
-           margin: "0 auto"
-         }}>
-            <h3 style={{ fontSize: "2rem", fontWeight: "800", color: COLORS.navy, marginBottom: "16px" }}>{content.newsletter.title}</h3>
-            <p style={{ color: "#6B7280", marginBottom: "32px" }}>{content.newsletter.text}</p>
-            
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
-              <input 
-                type="email" 
-                className="input-field"
-                placeholder={content.newsletter.placeholder} 
-                style={{ 
-                  maxWidth: "350px"
-                }} 
-              />
-              <button style={{...styles.button.primary, backgroundColor: COLORS.navy}}>
-                {content.newsletter.button}
-              </button>
-            </div>
-         </div>
-      </div>
-    </section>
-  );
-};
-
 const Footer = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
   const content = useContent();
 
   const handleLinkClick = (e: React.MouseEvent, linkText: string) => {
     e.preventDefault();
     switch (linkText) {
-      case "New Arrivals":
-      case "Best Sellers":
-      case "Graded Cards":
+      case "Minted Showcase":
         onNavigate('shop');
         break;
       case "Memorabilia":
         onNavigate('memorabilia');
         break;
       case "FAQ":
-      case "Shipping & Returns":
+        onNavigate('faq');
+        break;
       case "Contact Us":
         onNavigate('contact');
         break;
@@ -1515,6 +1586,8 @@ const App = () => {
         return <AboutPage />;
       case 'contact':
         return <ContactPage />;
+      case 'faq':
+        return <FAQPage />;
       case 'community':
         return <CommunityPage />;
       case 'home':
@@ -1525,9 +1598,7 @@ const App = () => {
               onShopClick={() => handleNavigation('shop')} 
               onCommunityClick={() => handleNavigation('community')}
             />
-            <Features />
-            <ShopSection onNavigate={handleNavigation} />
-            <AboutSection />
+            <Features onShopClick={() => handleNavigation('shop')} />
           </>
         );
     }
@@ -1539,7 +1610,6 @@ const App = () => {
       <Header onNavigate={handleNavigation} />
       <main>
         {renderPage()}
-        <Newsletter />
       </main>
       <Footer onNavigate={handleNavigation} />
     </ContentContext.Provider>
