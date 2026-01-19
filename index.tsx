@@ -106,10 +106,19 @@ interface ContactPageContent {
   form: {
     name: string;
     email: string;
-    subject: string;
+    typeLabel: string;
+    types: {
+      specific: string;
+      trade: string;
+      general: string;
+    };
+    cardDetails: string;
+    tradeHave: string;
+    tradeWant: string;
     message: string;
     submit: string;
   };
+  infoTiles: { title: string; desc: string }[];
 }
 
 interface CommunityPageContent {
@@ -205,6 +214,12 @@ const Icons = {
   ),
   Move: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
+  ),
+  Search: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+  ),
+  Refresh: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
   )
 };
 
@@ -300,6 +315,32 @@ const styles = {
       font-weight: 600;
       color: ${COLORS.navy};
       margin-bottom: 6px;
+    }
+    
+    .inquiry-btn {
+      padding: 16px;
+      border: 1px solid ${COLORS.lightGray};
+      background-color: ${COLORS.white};
+      color: ${COLORS.navy};
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .inquiry-btn.active {
+      background-color: ${COLORS.navy};
+      color: ${COLORS.white};
+      border-color: ${COLORS.navy};
+      box-shadow: 0 4px 12px rgba(19, 41, 75, 0.2);
+    }
+    .inquiry-btn:hover:not(.active) {
+      background-color: rgba(123, 175, 212, 0.1);
+      border-color: ${COLORS.carolinaBlue};
     }
 
     /* Range Slider Styling */
@@ -1189,7 +1230,7 @@ const PostCard: React.FC<{ post: SocialPost; onImageClick?: (url: string) => voi
         </div>
 
         {/* Text */}
-        <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#1F2937', marginBottom: '16px' }}>
+        <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#1F2937', marginBottom: post.hasImage ? '16px' : '0' }}>
           {post.text}
         </p>
       </div>
@@ -1204,7 +1245,6 @@ const PostCard: React.FC<{ post: SocialPost; onImageClick?: (url: string) => voi
                display: 'flex', 
                justifyContent: 'center', 
                borderTop: `1px solid ${COLORS.lightGray}`, 
-               borderBottom: `1px solid ${COLORS.lightGray}`,
                cursor: onImageClick ? 'zoom-in' : 'default'
              }}
              onClick={() => onImageClick && post.imageUrl && onImageClick(post.imageUrl)}
@@ -1226,25 +1266,6 @@ const PostCard: React.FC<{ post: SocialPost; onImageClick?: (url: string) => voi
            </div>
         )
       )}
-
-      {/* Footer / Actions */}
-      <div style={{ 
-        padding: '16px 20px', 
-        borderTop: post.imageUrl ? 'none' : `1px solid ${COLORS.lightGray}`,
-        display: 'flex',
-        gap: '24px',
-        color: '#6B7280'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-           <Icons.Heart /> <span style={{ fontSize: '0.9rem' }}>{post.likes}</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-           <Icons.MessageSquare /> <span style={{ fontSize: '0.9rem' }}>{post.comments}</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-           <Icons.Share /> <span style={{ fontSize: '0.9rem' }}>Share</span>
-        </div>
-      </div>
     </div>
   );
 };
@@ -1466,32 +1487,7 @@ const CommunityPage = () => {
 
       <div style={{ ...styles.container, padding: '40px 20px 80px' }}>
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-          {/* Create Post Placeholder */}
-          <div style={{ 
-            backgroundColor: 'white', 
-            borderRadius: '16px', 
-            padding: '20px', 
-            marginBottom: '32px',
-            border: `1px solid ${COLORS.lightGray}`,
-            display: 'flex',
-            gap: '16px',
-            alignItems: 'center'
-          }}>
-             <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#E5E7EB' }}></div>
-             <input 
-              type="text" 
-              placeholder="What's on your mind?" 
-              style={{ 
-                flex: 1, 
-                border: 'none', 
-                backgroundColor: '#F3F4F6', 
-                borderRadius: '24px', 
-                padding: '12px 20px',
-                outline: 'none'
-              }} 
-             />
-          </div>
-
+          
           {/* Feed */}
           {page.feed.map((post) => (
             <PostCard 
@@ -1585,7 +1581,7 @@ const FAQPage = () => {
             <div key={index} style={{ 
               backgroundColor: COLORS.white, 
               borderRadius: '12px', 
-              overflow: 'hidden',
+              overflow: 'hidden', 
               border: `1px solid ${COLORS.lightGray}`,
               boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
             }}>
@@ -1628,6 +1624,8 @@ const FAQPage = () => {
 const ContactPage = () => {
   const content = useContent();
   const page = content.contactPage;
+  // State to track inquiry type: 'specific', 'trade', 'general'
+  const [inquiryType, setInquiryType] = useState<keyof typeof page.form.types>('specific');
 
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
@@ -1640,10 +1638,12 @@ const ContactPage = () => {
       </div>
 
       <div style={{ ...styles.container, padding: '60px 20px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '60px' }}>
           
-          {/* Contact Info */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          {/* Left Column: Info Tiles */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+             
+             {/* Dynamic Email Block */}
              <div style={{ padding: '32px', backgroundColor: COLORS.white, borderRadius: '16px', border: `1px solid ${COLORS.lightGray}`, boxShadow: '0 4px 10px rgba(0,0,0,0.03)' }}>
                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
                   <div style={{ padding: '12px', background: 'rgba(123, 175, 212, 0.1)', borderRadius: '12px', color: COLORS.carolinaBlue }}>
@@ -1651,46 +1651,88 @@ const ContactPage = () => {
                   </div>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: COLORS.navy }}>{page.emailLabel}</h3>
                </div>
-               <p style={{ color: '#4B5563', fontSize: '1.1rem', marginBottom: '8px' }}>
-                 We're here to help with any questions.
-               </p>
                <a href={`mailto:${page.emailValue}`} style={{ fontSize: '1.25rem', color: COLORS.carolinaBlue, fontWeight: '600', textDecoration: 'none' }}>
                  {page.emailValue}
                </a>
              </div>
              
-             <div style={{ padding: '32px', backgroundColor: COLORS.navy, borderRadius: '16px', color: 'white' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '16px' }}>FAQ</h3>
-                <p style={{ color: '#E0E7FF', lineHeight: '1.6' }}>
-                  Typically, we respond to all inquiries within 24-48 hours. For immediate assistance with an existing order, please include your order number in the subject line.
-                </p>
-             </div>
+             {/* Info Tiles Loop */}
+             {page.infoTiles.map((tile, idx) => (
+                <div key={idx} style={{ padding: '24px', backgroundColor: idx === 1 ? COLORS.navy : 'transparent', color: idx === 1 ? 'white' : COLORS.text, borderRadius: '16px', border: idx === 1 ? 'none' : `1px solid ${COLORS.lightGray}` }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: '700', marginBottom: '12px', color: idx === 1 ? 'white' : COLORS.navy }}>{tile.title}</h3>
+                    <p style={{ lineHeight: '1.6', fontSize: '1rem', color: idx === 1 ? '#E0E7FF' : '#4B5563' }}>{tile.desc}</p>
+                </div>
+             ))}
+
           </div>
 
-          {/* Form */}
-          <div style={{ backgroundColor: COLORS.white, padding: '40px', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
+          {/* Right Column: Dynamic Form */}
+          <div style={{ backgroundColor: COLORS.white, padding: '40px', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', height: 'fit-content' }}>
             <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              
+              {/* Type Selector */}
               <div>
-                <label className="label">{page.form.name}</label>
-                <input type="text" className="input-field" placeholder="John Doe" />
+                <label className="label" style={{ marginBottom: '12px' }}>{page.form.typeLabel}</label>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                  {(['specific', 'trade', 'general'] as const).map((type) => (
+                    <div 
+                      key={type}
+                      className={`inquiry-btn ${inquiryType === type ? 'active' : ''}`}
+                      onClick={() => setInquiryType(type)}
+                    >
+                      {type === 'specific' && <Icons.Search />}
+                      {type === 'trade' && <Icons.Refresh />}
+                      {type === 'general' && <Icons.MessageSquare />}
+                      <span style={{ fontSize: '0.85rem' }}>{page.form.types[type]}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div>
-                <label className="label">{page.form.email}</label>
-                <input type="email" className="input-field" placeholder="john@example.com" />
+
+              {/* Common Fields */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div>
+                  <label className="label">{page.form.name}</label>
+                  <input type="text" className="input-field" placeholder="John Doe" />
+                </div>
+                <div>
+                  <label className="label">{page.form.email}</label>
+                  <input type="email" className="input-field" placeholder="john@example.com" />
+                </div>
               </div>
-              <div>
-                <label className="label">{page.form.subject}</label>
-                <select className="input-field">
-                  <option>General Inquiry</option>
-                  <option>Order Status</option>
-                  <option>Valuation Request</option>
-                  <option>Partnership</option>
-                </select>
-              </div>
+
+              {/* Conditional Fields based on Inquiry Type */}
+              {inquiryType === 'specific' && (
+                <div className="fade-in">
+                   <label className="label">{page.form.cardDetails}</label>
+                   <input type="text" className="input-field" placeholder="e.g. 1999 Charizard Base Set PSA 10" />
+                </div>
+              )}
+
+              {inquiryType === 'trade' && (
+                <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                   <div>
+                     <label className="label">{page.form.tradeHave}</label>
+                     <textarea className="input-field" rows={3} placeholder="List items and conditions..." style={{ resize: 'vertical' }}></textarea>
+                   </div>
+                   <div>
+                     <label className="label">{page.form.tradeWant}</label>
+                     <textarea className="input-field" rows={3} placeholder="List items or cash value..." style={{ resize: 'vertical' }}></textarea>
+                   </div>
+                </div>
+              )}
+
+              {/* Message Field (Always Visible) */}
               <div>
                 <label className="label">{page.form.message}</label>
-                <textarea className="input-field" rows={5} placeholder="How can we help you?" style={{ resize: 'vertical' }}></textarea>
+                <textarea 
+                  className="input-field" 
+                  rows={inquiryType === 'trade' ? 3 : 5} 
+                  placeholder="Any other details..." 
+                  style={{ resize: 'vertical' }}
+                ></textarea>
               </div>
+
               <button type="submit" style={{ ...styles.button.primary, width: '100%', marginTop: '10px' }}>
                 {page.form.submit}
               </button>
@@ -1699,6 +1741,15 @@ const ContactPage = () => {
 
         </div>
       </div>
+      <style>{`
+        .fade-in {
+          animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(5px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 };

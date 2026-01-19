@@ -156,7 +156,7 @@
     ]
   },
   "communityPage": {
-    "title": "The Huddle",
+    "title": "Minted Community",
     "subtitle": "Show offs, mail days, and market talk.",
     "feed": [
       {
@@ -198,16 +198,38 @@
     ]
   },
   "contactPage": {
-    "title": "Contact Us",
-    "subtitle": "Have a question about a drop or need valuation advice? Send us a message.",
-    "emailLabel": "Email Support",
+    "title": "Get in Touch",
+    "subtitle": "Whether you're hunting for a grail, looking to trade, or have a question, let's connect.",
+    "emailLabel": "Direct Email",
     "emailValue": "carolinaminted@gmail.com",
     "form": {
       "name": "Full Name",
       "email": "Email Address",
-      "subject": "Subject",
-      "message": "Message",
-      "submit": "Send Message"
-    }
+      "typeLabel": "How can we help you?",
+      "types": {
+        "specific": "Sourcing / Buying",
+        "trade": "Trade Proposal",
+        "general": "General Inquiry"
+      },
+      "cardDetails": "Which card or set are you looking for?",
+      "tradeHave": "What are you trading?",
+      "tradeWant": "What value/cards are you looking for?",
+      "message": "Additional Details",
+      "submit": "Send Inquiry"
+    },
+    "infoTiles": [
+      {
+        "title": "Sourcing Requests",
+        "desc": "Looking for a specific PSA 10 or raw vintage card? We have an extensive network. Let us know what's on your hit list."
+      },
+      {
+        "title": "Trade Policy",
+        "desc": "We love trades. We generally look for 70-80% value in our favor if trading down, or 1:1 for high-liquidity staples."
+      },
+      {
+        "title": "General Support",
+        "desc": "Have questions about grading submissions, shipping, or upcoming drops? We typically respond within 24 hours."
+      }
+    ]
   }
 }
