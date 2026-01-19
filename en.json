@@ -7,7 +7,6 @@
   },
   "nav": {
     "home": "Home",
-    "mintedShowcase": "Minted Showcase",
     "community": "Community",
     "aboutUs": "About Us",
     "contact": "Contact"
@@ -17,7 +16,6 @@
     "headlineStart": "Collect. Vault. Sell",
     "headlineHighlight": "Buy. Hold. 💎🙌🚀",
     "subtext": "Premium trading cards, memorabilia, and exclusive drops for the true collectors. Certified authentic, delivered with Southern hospitality.",
-    "ctaPrimary": "Latest adds to the vault",
     "ctaSecondary": "Carolina Minted Community"
   },
   "features": {
@@ -39,62 +37,39 @@
       }
     ]
   },
-  "shop": {
-    "sectionTitle": "Collectr Portfolio",
-    "pageTitle": "Minted Showcase",
-    "sectionSubtitle": "Track our live portfolio on Collectr including Pokémon and Star Wars Unlimited assets.",
-    "addToCart": "Add to Cart",
-    "viewAllButton": "View All Inventory",
-    "inventory": [
-      {
-        "id": "prod_001",
-        "title": "#23 Retro Rookie Card (Mint 10)",
-        "price": "450.00",
-        "type": "GRAIL",
-        "color": "gold",
-        "image": "prod_001.jpg"
-      },
-      {
-        "id": "prod_002",
-        "title": "Carolina Blue Hobby Box '24",
-        "price": "120.00",
-        "type": "SEALED",
-        "color": "blue",
-        "image": "prod_002.jpg"
-      },
-      {
-        "id": "prod_003",
-        "title": "Championship Court Floor Piece",
-        "price": "85.00",
-        "type": "MEMORABILIA",
-        "color": "blue",
-        "image": "prod_003.jpg"
-      },
-      {
-        "id": "prod_004",
-        "title": "Coach's Signature Series",
-        "price": "299.00",
-        "type": "AUTO",
-        "color": "gold",
-        "image": "prod_004.jpg"
-      },
-      {
-        "id": "prod_005",
-        "title": "Pikachu Illustrator Style (Holo)",
-        "price": "950.00",
-        "type": "POKEMON",
-        "color": "gold",
-        "image": "prod_005.jpg"
-      },
-      {
-        "id": "prod_006",
-        "title": "Galactic Empire Deck (Sealed)",
-        "price": "55.00",
-        "type": "STAR WARS",
-        "color": "blue",
-        "image": "prod_006.jpg"
+  "home": {
+    "ethos": {
+      "title": "Our Ethos",
+      "body": "At Carolina Minted Collectibles, we treat every card as an investment. Our rigorous acquisition process ensures we only offer collectibles that meet our standards for condition, authenticity, and value potential. We use industry-leading grading services to verify authenticity, and we store our premium inventory in secure vaults. Our commitment is simple: quality over quantity."
+    },
+    "expertise": {
+      "title": "What We Do",
+      "intro": "We specialize in professionally graded collectibles with long-term growth potential. Our inventory features:",
+      "list": [
+        { "title": "PSA & BGS Graded Cards", "desc": "Premium modern Pokémon cards (PSA 10 and PSA 9), select vintage sports cards, and high-grade Star Wars Unlimited collectibles" },
+        { "title": "Strategic Inventory", "desc": "We focus on assets with proven scarcity and strong market fundamentals, particularly cards from the Pokémon Sword & Shield and Sun & Moon eras" },
+        { "title": "Market Expertise", "desc": "We navigate market dynamics to identify undervalued opportunities and capitalize on emerging trends" }
+      ]
+    },
+    "values": {
+      "title": "The Carolina Standard",
+      "list": [
+        "Authenticated Quality – Every graded card is certified by industry-leading services",
+        "Market Knowledge – We stay ahead of trends and identify value opportunities",
+        "Secure Storage – Premium inventory stored in PSA Vault",
+        "Transparent Pricing – Fair market values based on recent sales data",
+        "Long-Term Focus – We're building a business for the next generation of collectors"
+      ]
+    },
+    "recentEvents": {
+      "title": "Recent Happenings",
+      "highlight": {
+        "title": "NC Card Fest - Greensboro",
+        "date": "Jan 2026",
+        "desc": "Connecting with the community is at the core of what we do. We recently attended the NC Card Fest, securing major grail pieces including a PSA 10 Gengar & Mimikyu GX and meeting fellow collectors.",
+        "imageLabel": "NC CARD FEST"
       }
-    ]
+    }
   },
   "memorabiliaPage": {
     "title": "Memorabilia",
@@ -150,25 +125,8 @@
       "missionStatement": "Carolina Minted Collectibles' mission is to build lasting value for collectors and investors by strategically acquiring, curating, and trading high-grade Pokémon and sports collectibles. We focus on assets with long-term growth potential, navigating market dynamics to secure scarcity and capitalize on opportunities for future generations.",
       "storyTitle": "Our Story",
       "storyBody": "Carolina Minted Collectibles was founded in 2025 with a clear vision: to build lasting value for collectors and investors by strategically acquiring, curating, and trading premium trading cards. What started as a passion for the hobby has evolved into a thriving business focused on high-grade Pokémon, sports collectibles, and Star Wars Unlimited trading cards. Based in Gastonia, North Carolina, we combine market expertise with a deep appreciation for the collectibles that connect generations of fans and players.",
-      "whatWeDoTitle": "What We Do",
-      "whatWeDoIntro": "We specialize in professionally graded collectibles with long-term growth potential. Our inventory features:",
-      "whatWeDoList": [
-        { "title": "PSA & BGS Graded Cards", "desc": "Premium modern Pokémon cards (PSA 10 and PSA 9), select vintage sports cards, and high-grade Star Wars Unlimited collectibles" },
-        { "title": "Strategic Inventory", "desc": "We focus on assets with proven scarcity and strong market fundamentals, particularly cards from the Pokémon Sword & Shield and Sun & Moon eras" },
-        { "title": "Market Expertise", "desc": "We navigate market dynamics to identify undervalued opportunities and capitalize on emerging trends" }
-      ],
-      "approachTitle": "Our Approach",
-      "approachBody": "At Carolina Minted Collectibles, we treat every card as an investment. Our rigorous acquisition process ensures we only offer collectibles that meet our standards for condition, authenticity, and value potential. We use industry-leading grading services (PSA and Beckett) to verify authenticity and condition, and we store our premium inventory in PSA Vault for maximum security and liquidity. Our commitment is simple: quality over quantity. We're continually consolidating our holdings toward fewer, higher-value assets that represent the best opportunities for collectors and investors.",
       "lookingAheadTitle": "Looking Ahead",
-      "lookingAheadBody": "We're expanding our operations to better serve the collecting community. In 2026, we'll be launching enhanced retail operations, including an e-commerce platform and in-person sales opportunities. We're also growing our Star Wars Unlimited selection, with a focus on limited, serialized cards that present compelling opportunities for future appreciation.",
-      "whyChooseUsTitle": "Why Choose Us",
-      "whyChooseUsList": [
-        "Authenticated Quality – Every graded card is certified by industry-leading services",
-        "Market Knowledge – We stay ahead of trends and identify value opportunities",
-        "Secure Storage – Premium inventory stored in PSA Vault",
-        "Transparent Pricing – Fair market values based on recent sales data",
-        "Long-Term Focus – We're building a business for the next generation of collectors"
-      ]
+      "lookingAheadBody": "We're expanding our operations to better serve the collecting community. In 2026, we'll be launching enhanced retail operations, including an e-commerce platform and in-person sales opportunities. We're also growing our Star Wars Unlimited selection, with a focus on limited, serialized cards that present compelling opportunities for future appreciation."
     }
   },
   "faqPage": {
@@ -205,31 +163,35 @@
         "id": "p1",
         "author": "Carolina Minted Collectibles",
         "authorInitials": "CM",
-        "time": "2h ago",
-        "text": "🚨 JUST IN: Huge PSA return day! We hit 85% Gem Mint 10s on this sub. This Umbreon VMAX is absolutely stunning in person. Listing it in the shop later tonight! 💎",
+        "time": "Jan 18, 2026",
+        "text": "Had an absolute blast at NC Card Fest in Greensboro! Managed to trade up some binder quantity into a massive PC addition: a PSA 10 Gengar & Mimikyu GX Tag Team Alt Art. Finally secured the ghost grail! 👻✨",
         "hasImage": true,
         "imageColor": "navy",
+        "imageUrl": "https://bronze-generous-halibut-259.mypinata.cloud/ipfs/bafybeicm3s3qq6y77eolx5boin6py7zjujfv7otlagc227l2njcwe7mqhq",
         "likes": 124,
         "comments": 18
       },
       {
         "id": "p2",
-        "author": "Collector_Steve",
-        "authorInitials": "CS",
-        "time": "5h ago",
-        "text": "Does anyone know if the grading standards for vintage have tightened up recently? Sent in a '86 Fleer Jordan that looked clean but came back an 8. Still happy to have it slabbed though!",
-        "hasImage": false,
-        "likes": 45,
+        "author": "Carolina Minted Collectibles",
+        "authorInitials": "CM",
+        "time": "Jan 18, 2026",
+        "text": "Couldn't leave the show without grabbing some Eeveelutions. Picked up the Jolteon ex and Espeon ex from Prismatic Evolutions in crisp raw condition. Grading submission going out next week—fingers crossed for Gem Mints! ⚡🔮",
+        "hasImage": true,
+        "imageColor": "navy",
+        "imageUrl": "https://bronze-generous-halibut-259.mypinata.cloud/ipfs/bafkreidczibcju6xyqcybrjbf6g2nohtruwm5mydmo7ejdvyd6pbqsetyi",
+        "likes": 89,
         "comments": 12
       },
       {
         "id": "p3",
         "author": "Carolina Minted Collectibles",
         "authorInitials": "CM",
-        "time": "1d ago",
-        "text": "Who is watching the game tonight? If UNC wins, we might just drop a surprise discount code. Stay tuned. 👀🏀 #TarHeels",
+        "time": "Dec 25, 2025",
+        "text": "Christmas '25 was one for the books! Pulled a Zekrom ex SIR, Moltres ex SIR, and the chase Leafeon ex from Prismatic Evolutions. Nothing beats cracking packs with the fam. Hope everyone had great pulls! 🎄🎁🔥",
         "hasImage": true,
         "imageColor": "blue",
+        "imageUrl": "https://bronze-generous-halibut-259.mypinata.cloud/ipfs/bafkreieyfusi4hf47jyggqmaopjz6zhqhbbwk74oq4ygmuihxyeyzvdjfy",
         "likes": 289,
         "comments": 56
       }
@@ -247,20 +209,5 @@
       "message": "Message",
       "submit": "Send Message"
     }
-  },
-  "footer": {
-    "brandColumn": {
-      "title": "Carolina Minted Collectibles",
-      "text": "The premier destination for high-end sports collectibles in the Tar Heel State."
-    },
-    "shopColumn": {
-      "title": "Shop",
-      "links": ["Minted Showcase", "Memorabilia"]
-    },
-    "supportColumn": {
-      "title": "Support",
-      "links": ["FAQ", "Authenticity Guarantee", "Contact Us"]
-    },
-    "copyright": "© 2025 Carolina Minted Collectibles, LLC. All rights reserved."
   }
 }

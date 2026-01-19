@@ -9,7 +9,7 @@ interface InventoryItem {
   price: string;
   type: string;
   color: string;
-  image?: string; // Can be a filename (prod_001.jpg) or a full URL
+  image?: string;
 }
 
 interface SocialPost {
@@ -20,6 +20,7 @@ interface SocialPost {
   text: string;
   hasImage: boolean;
   imageColor?: string;
+  imageUrl?: string;
   likes: number;
   comments: number;
 }
@@ -32,7 +33,6 @@ interface FeatureItem {
 
 interface NavContent {
   home: string;
-  mintedShowcase: string;
   community: string;
   aboutUs: string;
   contact: string;
@@ -43,17 +43,33 @@ interface HeroContent {
   headlineStart: string;
   headlineHighlight: string;
   subtext: string;
-  ctaPrimary: string;
   ctaSecondary: string;
 }
 
-interface ShopContent {
-  sectionTitle: string;
-  pageTitle: string;
-  sectionSubtitle: string;
-  addToCart: string;
-  viewAllButton: string;
-  inventory: InventoryItem[];
+interface HomeEthosContent {
+  title: string;
+  body: string;
+}
+
+interface HomeExpertiseContent {
+  title: string;
+  intro: string;
+  list: { title: string; desc: string }[];
+}
+
+interface HomeValuesContent {
+  title: string;
+  list: string[];
+}
+
+interface HomeEventContent {
+  title: string;
+  highlight: {
+    title: string;
+    date: string;
+    desc: string;
+    imageLabel: string;
+  };
 }
 
 interface MemorabiliaContent {
@@ -67,15 +83,8 @@ interface AboutPageContent {
   missionStatement: string;
   storyTitle: string;
   storyBody: string;
-  whatWeDoTitle: string;
-  whatWeDoIntro: string;
-  whatWeDoList: { title: string; desc: string }[];
-  approachTitle: string;
-  approachBody: string;
   lookingAheadTitle: string;
   lookingAheadBody: string;
-  whyChooseUsTitle: string;
-  whyChooseUsList: string[];
 }
 
 interface FAQItem {
@@ -109,13 +118,6 @@ interface CommunityPageContent {
   feed: SocialPost[];
 }
 
-interface FooterContent {
-  brandColumn: { title: string; text: string };
-  shopColumn: { title: string; links: string[] };
-  supportColumn: { title: string; links: string[] };
-  copyright: string;
-}
-
 interface AppContent {
   common: {
     brandName: string;
@@ -126,7 +128,12 @@ interface AppContent {
   nav: NavContent;
   hero: HeroContent;
   features: { items: FeatureItem[] };
-  shop: ShopContent;
+  home: {
+    ethos: HomeEthosContent;
+    expertise: HomeExpertiseContent;
+    values: HomeValuesContent;
+    recentEvents: HomeEventContent;
+  };
   memorabiliaPage: MemorabiliaContent;
   about: {
     page: AboutPageContent;
@@ -134,7 +141,6 @@ interface AppContent {
   faqPage: FAQPageContent;
   communityPage: CommunityPageContent;
   contactPage: ContactPageContent;
-  footer: FooterContent;
 }
 
 // --- Branding Constants ---
@@ -324,9 +330,9 @@ const styles = {
         padding: 30px 0 30px;
       }
 
-      /* Desktop: Enforce 2x2 Grid for Features */
+      /* Desktop: Enforce 2x2 Grid for Features - Adjusted for 3 items */
       .features-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
     }
     
@@ -390,25 +396,6 @@ const styles = {
       .why-choose-us-item {
         /* Removed column flex direction to fix alignment issues */
       }
-
-      /* Footer Mobile Styles */
-      .footer-grid {
-        text-align: center;
-      }
-      .footer-col {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .footer-list {
-        align-items: center !important; 
-      }
-      .footer-bottom {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center !important;
-        text-align: center;
-      }
     }
   `,
   container: {
@@ -467,7 +454,6 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
 
   const navItems = [
     { label: content.nav.home, id: 'home' },
-    { label: content.nav.mintedShowcase, id: 'shop' },
     { label: content.nav.community, id: 'community' },
     { label: content.nav.aboutUs, id: 'about' },
   ];
@@ -766,7 +752,7 @@ const Header = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
   );
 };
 
-const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCommunityClick: () => void }) => {
+const Hero = ({ onCommunityClick }: { onCommunityClick: () => void }) => {
   const content = useContent();
   
   return (
@@ -813,12 +799,6 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
           <div className="hero-buttons" style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
             <button 
               type="button"
-              onClick={onShopClick}
-              style={{...styles.button.primary, boxShadow: "0 10px 20px rgba(19, 41, 75, 0.2)"}}>
-              {content.hero.ctaPrimary}
-            </button>
-            <button 
-              type="button"
               onClick={onCommunityClick}
               style={styles.button.outline}>
               {content.hero.ctaSecondary}
@@ -830,12 +810,8 @@ const Hero = ({ onShopClick, onCommunityClick }: { onShopClick: () => void, onCo
   );
 };
 
-const Features = ({ onShopClick }: { onShopClick: () => void }) => {
+const Features = () => {
   const content = useContent();
-
-  const handlePortfolioClick = () => {
-    window.open("https://app.getcollectr.com/showcase/profile/7475de2d-97ff-4c25-b038-bc3317736824", "_blank");
-  };
 
   return (
     <section style={{ backgroundColor: COLORS.white, ...styles.section }}>
@@ -872,51 +848,156 @@ const Features = ({ onShopClick }: { onShopClick: () => void }) => {
               <p style={{ color: "#6B7280", lineHeight: "1.6" }}>{f.desc}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
-          {/* New Compact Showcase Tile (4th Grid Item) */}
-          <div 
-            onClick={handlePortfolioClick}
-            className="feature-card showcase-card-tile"
-            style={{ 
-              padding: "32px", 
-              borderRadius: "16px", 
-              backgroundColor: COLORS.offWhite,
-              border: `1px solid ${COLORS.lightGray}`,
-              transition: "transform 0.2s ease",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              cursor: "pointer",
-              position: 'relative'
-            }}
-            onMouseEnter={(e) => {
-                 e.currentTarget.style.transform = "translateY(-5px)";
-            }}
-            onMouseLeave={(e) => {
-                 e.currentTarget.style.transform = "translateY(0)";
-            }}
-          >
+// --- New Home Sections ---
+
+const EthosSection = () => {
+  const content = useContent();
+  const ethos = content.home.ethos;
+  
+  return (
+    <div style={{ backgroundColor: COLORS.navy, color: COLORS.white, padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
+      <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
+      <div style={{ ...styles.container, position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: '800px' }}>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '24px' }}>{ethos.title}</h2>
+        <p style={{ fontSize: '1.25rem', lineHeight: '1.8', color: '#E0E7FF' }}>{ethos.body}</p>
+      </div>
+    </div>
+  );
+};
+
+const ExpertiseSection = () => {
+  const content = useContent();
+  const expertise = content.home.expertise;
+
+  return (
+    <section style={{ ...styles.section, backgroundColor: COLORS.offWhite }}>
+      <div style={styles.container}>
+        <div style={{ textAlign: 'center', marginBottom: '60px', maxWidth: '800px', margin: '0 auto 60px' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: COLORS.navy, marginBottom: '16px' }}>{expertise.title}</h2>
+          <p style={{ fontSize: '1.1rem', color: '#4B5563' }}>{expertise.intro}</p>
+        </div>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+          {expertise.list.map((item, idx) => (
+            <div key={idx} className="what-we-do-card" style={{ 
+              padding: '32px', 
+              backgroundColor: COLORS.white, 
+              borderRadius: '16px', 
+              borderLeft: `4px solid ${COLORS.carolinaBlue}`, 
+              boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: '700', color: COLORS.navy, marginBottom: '12px' }}>{item.title}</h3>
+              <p style={{ color: '#4B5563', lineHeight: '1.6', fontSize: '1.05rem' }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const RecentEventsSection = () => {
+  const content = useContent();
+  const event = content.home.recentEvents;
+
+  return (
+    <section style={{ padding: '80px 0', backgroundColor: COLORS.white }}>
+      <div style={styles.container}>
+         <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: COLORS.navy, marginBottom: '40px', textAlign: 'center' }}>{event.title}</h2>
+         
+         <div style={{ 
+           display: 'grid', 
+           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+           gap: '40px',
+           alignItems: 'center'
+         }}>
+            <div style={{ order: 2 }}>
               <div style={{ 
-                width: "48px", 
-                height: "48px", 
-                backgroundColor: "rgba(123, 175, 212, 0.15)", 
-                borderRadius: "12px", 
-                display: "flex", 
-                alignItems: "center", 
-                justifyContent: "center",
-                marginBottom: "20px"
+                backgroundColor: COLORS.carolinaBlue, 
+                height: '350px', 
+                borderRadius: '16px', 
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden'
               }}>
-                <Icons.Chart />
+                <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2 }}></div>
+                <span style={{ color: 'white', fontWeight: '800', fontSize: '1.5rem', letterSpacing: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+                  {event.highlight.imageLabel}
+                </span>
               </div>
-              <h3 style={{ fontSize: "1.25rem", fontWeight: "700", color: COLORS.navy, marginBottom: "12px" }}>
-                  {content.shop.sectionTitle}
-              </h3>
-              <p style={{ color: "#6B7280", lineHeight: "1.6", marginBottom: "20px" }}>
-                  {content.shop.sectionSubtitle}
-              </p>
-          </div>
+            </div>
+            
+            <div style={{ order: 1 }}>
+               <div style={{ 
+                 display: 'inline-block', 
+                 padding: '6px 12px', 
+                 backgroundColor: COLORS.navy, 
+                 color: 'white', 
+                 borderRadius: '20px', 
+                 fontSize: '0.85rem', 
+                 fontWeight: '600',
+                 marginBottom: '16px'
+               }}>
+                 {event.highlight.date}
+               </div>
+               <h3 style={{ fontSize: '2rem', fontWeight: '700', color: COLORS.navy, marginBottom: '16px' }}>{event.highlight.title}</h3>
+               <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#4B5563', marginBottom: '24px' }}>
+                 {event.highlight.desc}
+               </p>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: COLORS.carolinaBlue, fontWeight: '700', cursor: 'pointer' }}>
+                  See More in Community <Icons.ArrowRight />
+               </div>
+            </div>
+         </div>
+      </div>
+    </section>
+  );
+};
 
+const ValuesSection = () => {
+  const content = useContent();
+  const values = content.home.values;
+
+  return (
+    <section style={{ ...styles.section, backgroundColor: COLORS.offWhite }}>
+      <div style={styles.container}>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: COLORS.navy, marginBottom: '40px', textAlign: 'center' }}>{values.title}</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+           {values.list.map((item, idx) => (
+             <div key={idx} className="why-choose-us-item" style={{ 
+               display: 'flex', 
+               alignItems: 'flex-start', 
+               gap: '16px',
+               backgroundColor: COLORS.white,
+               padding: '24px',
+               borderRadius: '12px',
+               border: `1px solid ${COLORS.lightGray}`,
+               boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
+             }}>
+               <div style={{ 
+                 flexShrink: 0, 
+                 backgroundColor: 'rgba(123, 175, 212, 0.15)',
+                 borderRadius: '50%',
+                 padding: '8px',
+                 display: 'flex',
+                 alignItems: 'center',
+                 justifyContent: 'center'
+               }}>
+                <Icons.Check />
+               </div>
+               <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#374151', margin: 0, textAlign: 'left' }}>{item}</p>
+             </div>
+           ))}
         </div>
       </div>
     </section>
@@ -928,11 +1009,10 @@ interface ProductCardProps {
   price: string;
   type: string;
   color: string;
-  image?: string; // Added image property
+  image?: string; 
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color, image }) => {
-  const content = useContent();
   return (
     <article style={{ 
       backgroundColor: COLORS.white, 
@@ -960,7 +1040,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color, im
       }}>
         {image ? (
            <img 
-             // Updated logic to support HTTP URLs alongside local paths
              src={image.startsWith('http') ? image : `./images/${image}`} 
              alt={title}
              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -1010,48 +1089,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, price, type, color, im
 
       <div style={{ padding: "20px" }}>
         <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: COLORS.navy, marginBottom: "8px" }}>{title}</h3>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: "1.25rem", fontWeight: "600", color: COLORS.text }}>{content.common.currencyPrefix}{price}</span>
-          <span style={{ fontSize: "0.875rem", color: COLORS.carolinaBlue, fontWeight: "500" }}>{content.shop.addToCart}</span>
-        </div>
       </div>
     </article>
   );
 };
 
-const AboutSection = () => {
-  const content = useContent();
-
-  return (
-    <section id="about-preview" style={{ ...styles.section, backgroundColor: COLORS.navy, color: COLORS.white }}>
-      <div style={styles.container}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <div style={{ 
-                width: '80px', 
-                height: '80px', 
-                backgroundColor: 'white', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                marginBottom: '32px'
-            }}>
-                <span style={{ fontSize: '2rem', fontWeight: 'bold', color: COLORS.navy }}>{content.about.initials}</span>
-            </div>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '24px' }}>{content.about.sectionTitle}</h2>
-            <p style={{ maxWidth: '700px', fontSize: '1.2rem', lineHeight: '1.8', color: '#E0E7FF', marginBottom: '40px' }}>
-              {content.about.sectionText}
-            </p>
-            <div style={{ width: '100px', height: '4px', backgroundColor: COLORS.carolinaBlue, borderRadius: '2px' }}></div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// --- New Pages ---
-
-const PostCard: React.FC<{ post: SocialPost }> = ({ post }) => {
+const PostCard: React.FC<{ post: SocialPost; onImageClick?: (url: string) => void }> = ({ post, onImageClick }) => {
   return (
     <div style={{
       backgroundColor: COLORS.white,
@@ -1097,24 +1140,41 @@ const PostCard: React.FC<{ post: SocialPost }> = ({ post }) => {
 
       {/* Image (Optional) */}
       {post.hasImage && (
-        <div style={{
-          width: '100%',
-          height: '300px',
-          backgroundColor: post.imageColor === 'navy' ? COLORS.navy : COLORS.carolinaBlue,
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-           <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15 }}></div>
-           <div style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 'bold', fontSize: '1.5rem', letterSpacing: '2px' }}>IMAGE PREVIEW</div>
-        </div>
+        post.imageUrl ? (
+           <div 
+             style={{ 
+               width: '100%', 
+               backgroundColor: '#f9fafb', 
+               display: 'flex', 
+               justifyContent: 'center', 
+               borderTop: `1px solid ${COLORS.lightGray}`, 
+               borderBottom: `1px solid ${COLORS.lightGray}`,
+               cursor: onImageClick ? 'zoom-in' : 'default'
+             }}
+             onClick={() => onImageClick && post.imageUrl && onImageClick(post.imageUrl)}
+           >
+               <img src={post.imageUrl} alt="Post Attachment" style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain', display: 'block' }} />
+           </div>
+        ) : (
+           <div style={{
+             width: '100%',
+             height: '300px',
+             backgroundColor: post.imageColor === 'navy' ? COLORS.navy : COLORS.carolinaBlue,
+             position: 'relative',
+             display: 'flex',
+             alignItems: 'center',
+             justifyContent: 'center'
+           }}>
+              <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15 }}></div>
+              <div style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 'bold', fontSize: '1.5rem', letterSpacing: '2px' }}>IMAGE PREVIEW</div>
+           </div>
+        )
       )}
 
       {/* Footer / Actions */}
       <div style={{ 
         padding: '16px 20px', 
-        borderTop: `1px solid ${COLORS.lightGray}`,
+        borderTop: post.imageUrl ? 'none' : `1px solid ${COLORS.lightGray}`,
         display: 'flex',
         gap: '24px',
         color: '#6B7280'
@@ -1136,6 +1196,16 @@ const PostCard: React.FC<{ post: SocialPost }> = ({ post }) => {
 const CommunityPage = () => {
   const content = useContent();
   const page = content.communityPage;
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (previewImage) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [previewImage]);
 
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
@@ -1177,7 +1247,11 @@ const CommunityPage = () => {
 
           {/* Feed */}
           {page.feed.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard 
+              key={post.id} 
+              post={post} 
+              onImageClick={(url) => setPreviewImage(url)} 
+            />
           ))}
 
           <div style={{ textAlign: 'center', marginTop: '40px', color: '#9CA3AF' }}>
@@ -1185,6 +1259,65 @@ const CommunityPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Image Preview Modal */}
+      {previewImage && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(19, 41, 75, 0.95)',
+            zIndex: 3000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+            backdropFilter: 'blur(5px)'
+          }}
+          onClick={() => setPreviewImage(null)}
+        >
+          <button 
+            onClick={() => setPreviewImage(null)}
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: '50%',
+              width: '44px',
+              height: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              cursor: 'pointer',
+              zIndex: 3001,
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+          >
+            <Icons.X />
+          </button>
+
+          <img 
+            src={previewImage} 
+            alt="Full Preview" 
+            style={{
+              maxWidth: '100%',
+              maxHeight: '90vh',
+              objectFit: 'contain',
+              borderRadius: '8px',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 };
@@ -1219,106 +1352,12 @@ const AboutPage = () => {
             <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#374151' }}>{page.storyBody}</p>
           </div>
 
-          {/* What We Do */}
-          <div>
-            <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '20px' }}>{page.whatWeDoTitle}</h2>
-            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#374151', marginBottom: '24px' }}>{page.whatWeDoIntro}</p>
-            <div style={{ display: 'grid', gap: '24px' }}>
-              {page.whatWeDoList.map((item, idx) => (
-                <div key={idx} className="what-we-do-card" style={{ padding: '24px', backgroundColor: COLORS.white, borderRadius: '12px', borderLeft: `4px solid ${COLORS.carolinaBlue}`, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: COLORS.navy, marginBottom: '8px' }}>{item.title}</h3>
-                  <p style={{ color: '#4B5563', lineHeight: '1.6' }}>{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Approach */}
-          <div style={{ backgroundColor: COLORS.navy, color: COLORS.white, padding: '40px', borderRadius: '16px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'relative', zIndex: 2 }}>
-              <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '20px' }}>{page.approachTitle}</h2>
-              <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#E0E7FF' }}>{page.approachBody}</p>
-            </div>
-            <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 1 }}></div>
-          </div>
-
           {/* Looking Ahead */}
           <div>
             <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '20px' }}>{page.lookingAheadTitle}</h2>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#374151' }}>{page.lookingAheadBody}</p>
           </div>
 
-          {/* Why Choose Us */}
-          <div>
-             <h2 style={{ color: COLORS.navy, fontSize: '2rem', fontWeight: '800', marginBottom: '30px' }}>{page.whyChooseUsTitle}</h2>
-             <div style={{ display: 'grid', gap: '16px' }}>
-               {page.whyChooseUsList.map((item, idx) => (
-                 <div key={idx} className="why-choose-us-item" style={{ 
-                   display: 'flex', 
-                   alignItems: 'flex-start', 
-                   gap: '16px',
-                   backgroundColor: COLORS.white,
-                   padding: '24px',
-                   borderRadius: '12px',
-                   border: `1px solid ${COLORS.lightGray}`,
-                   boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
-                 }}>
-                   <div style={{ 
-                     flexShrink: 0, 
-                     backgroundColor: 'rgba(123, 175, 212, 0.15)',
-                     borderRadius: '50%',
-                     padding: '8px',
-                     display: 'flex',
-                     alignItems: 'center',
-                     justifyContent: 'center'
-                   }}>
-                    <Icons.Check />
-                   </div>
-                   <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#374151', margin: 0, textAlign: 'left' }}>{item}</p>
-                 </div>
-               ))}
-             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// --- Generic Inventory Page (Replaces ShopPage and MemorabiliaPage) ---
-
-interface InventoryPageProps {
-  title: string;
-  subtitle: string;
-  items: InventoryItem[];
-}
-
-const InventoryPage: React.FC<InventoryPageProps> = ({ title, subtitle, items }) => {
-  return (
-    <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
-      <div className="page-header" style={{ backgroundColor: COLORS.navy, color: COLORS.white, position: 'relative', overflow: 'hidden' }}>
-         <div className="argyle-bg" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, zIndex: 0 }}></div>
-         <div style={{ ...styles.container, textAlign: 'center', position: 'relative', zIndex: 1 }}>
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '800', marginBottom: '20px' }}>{title}</h1>
-         </div>
-      </div>
-
-      <div style={{ ...styles.container, paddingBottom: '80px', paddingTop: '60px' }}>
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
-          gap: "32px" 
-        }}>
-          {items.map((item) => (
-             <ProductCard 
-                key={item.id}
-                title={item.title} 
-                price={item.price} 
-                type={item.type} 
-                color={item.color} 
-                image={item.image} // Pass image prop here
-             />
-          ))}
         </div>
       </div>
     </div>
@@ -1468,73 +1507,6 @@ const ContactPage = () => {
   );
 };
 
-const Footer = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
-  const content = useContent();
-
-  const handleLinkClick = (e: React.MouseEvent, linkText: string) => {
-    e.preventDefault();
-    switch (linkText) {
-      case "Minted Showcase":
-        onNavigate('shop');
-        break;
-      case "Memorabilia":
-        onNavigate('memorabilia');
-        break;
-      case "FAQ":
-        onNavigate('faq');
-        break;
-      case "Contact Us":
-        onNavigate('contact');
-        break;
-      case "Authenticity Guarantee":
-        onNavigate('about');
-        break;
-      default:
-        console.warn(`No route defined for footer link: ${linkText}`);
-        break;
-    }
-  };
-
-  return (
-    <footer style={{ backgroundColor: "#0F172A", color: "#94A3B8", padding: "60px 0 20px" }}>
-      <div style={styles.container}>
-        <div className="footer-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px", marginBottom: "60px" }}>
-          <div className="footer-col">
-            <h4 style={{ color: "white", fontSize: "1.2rem", fontWeight: "700", marginBottom: "20px" }}>{content.footer.brandColumn.title}</h4>
-            <p style={{ fontSize: "0.9rem", lineHeight: "1.6" }}>{content.footer.brandColumn.text}</p>
-          </div>
-          <div className="footer-col">
-            <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>{content.footer.shopColumn.title}</h4>
-            <ul className="footer-list" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
-              {content.footer.shopColumn.links.map((link, i) => (
-                <li key={i}><a href="#" onClick={(e) => handleLinkClick(e, link)} style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
-              ))}
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4 style={{ color: "white", fontSize: "1rem", fontWeight: "600", marginBottom: "20px" }}>{content.footer.supportColumn.title}</h4>
-            <ul className="footer-list" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
-              {content.footer.supportColumn.links.map((link, i) => (
-                 <li key={i}><a href="#" onClick={(e) => handleLinkClick(e, link)} style={{ textDecoration: "none", color: "inherit" }}>{link}</a></li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        
-        <div className="footer-bottom" style={{ borderTop: "1px solid #1E293B", paddingTop: "20px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "20px" }}>
-          <p style={{ fontSize: "0.875rem" }}>{content.footer.copyright}</p>
-          <div style={{ display: "flex", gap: "20px" }}>
-             {/* Social Placeholders */}
-             <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
-             <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
-             <div style={{ width: '20px', height: '20px', backgroundColor: '#334155', borderRadius: '4px' }}></div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-};
-
 // --- Main App Component ---
 
 const App = () => {
@@ -1579,10 +1551,6 @@ const App = () => {
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'shop':
-        return <InventoryPage title={content.shop.pageTitle} subtitle={content.shop.sectionSubtitle} items={content.shop.inventory} />;
-      case 'memorabilia':
-        return <InventoryPage title={content.memorabiliaPage.title} subtitle={content.memorabiliaPage.subtitle} items={content.memorabiliaPage.inventory} />;
       case 'about':
         return <AboutPage />;
       case 'contact':
@@ -1596,10 +1564,13 @@ const App = () => {
         return (
           <>
             <Hero 
-              onShopClick={() => handleNavigation('shop')} 
               onCommunityClick={() => handleNavigation('community')}
             />
-            <Features onShopClick={() => handleNavigation('shop')} />
+            <Features />
+            <EthosSection />
+            <ExpertiseSection />
+            <RecentEventsSection />
+            <ValuesSection />
           </>
         );
     }
@@ -1612,7 +1583,7 @@ const App = () => {
       <main>
         {renderPage()}
       </main>
-      <Footer onNavigate={handleNavigation} />
+      {/* Footer removed globally */}
     </ContentContext.Provider>
   );
 };
