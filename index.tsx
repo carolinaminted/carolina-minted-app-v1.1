@@ -1230,7 +1230,7 @@ const PostCard: React.FC<{ post: SocialPost; onImageClick?: (url: string) => voi
         </div>
 
         {/* Text */}
-        <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#1F2937', marginBottom: post.hasImage ? '16px' : '0' }}>
+        <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#1F2937', marginBottom: post.hasImage ? '16px' : '0', whiteSpace: 'pre-wrap' }}>
           {post.text}
         </p>
       </div>
