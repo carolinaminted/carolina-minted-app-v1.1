@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, createContext, useContext } from "react";
+import React, { useState, useEffect, useLayoutEffect, createContext, useContext, useRef } from "react";
 import { createRoot } from "react-dom/client";
 
 // --- Types & Interfaces ---
@@ -199,6 +199,12 @@ const Icons = {
   ),
   ChevronDown: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  ),
+  ZoomIn: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+  ),
+  Move: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
   )
 };
 
@@ -294,6 +300,56 @@ const styles = {
       font-weight: 600;
       color: ${COLORS.navy};
       margin-bottom: 6px;
+    }
+
+    /* Range Slider Styling */
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+      margin: 10px 0;
+    }
+    input[type=range]:focus {
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      background: ${COLORS.carolinaBlue};
+      border: 2px solid white;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -9px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    input[type=range]:focus::-webkit-slider-runnable-track {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    input[type=range]::-moz-range-thumb {
+      height: 24px;
+      width: 24px;
+      border: 2px solid white;
+      border-radius: 50%;
+      background: ${COLORS.carolinaBlue};
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
     /* Hero Section Base */
@@ -1193,19 +1249,210 @@ const PostCard: React.FC<{ post: SocialPost; onImageClick?: (url: string) => voi
   );
 };
 
+const ImagePreviewModal = ({ imageUrl, onClose }: { imageUrl: string; onClose: () => void }) => {
+  const [zoomLevel, setZoomLevel] = useState(1); // 1.0 to 2.0
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  
+  // Use a ref to track if interaction is happening for performance
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Prevent background scrolling
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  const handleZoomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    setZoomLevel(val);
+    // Reset position if zoomed out to start
+    if (val === 1) {
+      setPosition({ x: 0, y: 0 });
+    }
+  };
+
+  const startDrag = (clientX: number, clientY: number) => {
+    if (zoomLevel > 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: clientX - position.x,
+        y: clientY - position.y
+      });
+    }
+  };
+
+  const onDrag = (clientX: number, clientY: number) => {
+    if (isDragging && zoomLevel > 1) {
+      // Free panning when zoomed in
+      setPosition({
+        x: clientX - dragStart.x,
+        y: clientY - dragStart.y
+      });
+    }
+  };
+
+  const endDrag = () => {
+    setIsDragging(false);
+  };
+
+  // Mouse Handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  };
+  const handleMouseMove = (e: React.MouseEvent) => onDrag(e.clientX, e.clientY);
+  
+  // Touch Handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    // Only handle single touch for pan, ignore pinch for now to keep it simple with slider
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  };
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      onDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  };
+
+  return (
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(19, 41, 75, 0.98)',
+        zIndex: 3000,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backdropFilter: 'blur(5px)',
+        touchAction: 'none' // Critical for handling touches in JS
+      }}
+    >
+      {/* Top Controls */}
+      <div style={{ 
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        padding: '20px', 
+        display: 'flex', 
+        justifyContent: 'flex-end',
+        zIndex: 3002
+      }}>
+        <button 
+          onClick={onClose}
+          style={{
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: '50%',
+            width: '44px',
+            height: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            cursor: 'pointer',
+            transition: 'background 0.2s'
+          }}
+        >
+          <Icons.X />
+        </button>
+      </div>
+
+      {/* Image Container */}
+      <div 
+        ref={containerRef}
+        style={{
+          flex: 1,
+          width: '100%',
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default',
+          position: 'relative'
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={endDrag}
+        onMouseLeave={endDrag}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={endDrag}
+      >
+        <img 
+          src={imageUrl} 
+          alt="Full Preview" 
+          draggable={false}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '80vh',
+            objectFit: 'contain',
+            transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
+            transition: isDragging ? 'none' : 'transform 0.1s ease-out',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+            userSelect: 'none'
+          }}
+        />
+        
+        {zoomLevel === 1 && (
+           <div style={{ position: 'absolute', bottom: '20px', color: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', gap: '8px', pointerEvents: 'none' }}>
+              <Icons.ZoomIn /> Use slider to zoom
+           </div>
+        )}
+      </div>
+
+      {/* Bottom Controls (Slider) */}
+      <div style={{ 
+        width: '100%', 
+        padding: '30px 20px 50px', 
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '10px',
+        zIndex: 3002
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '400px', color: COLORS.carolinaBlue, fontSize: '0.85rem', fontWeight: '600' }}>
+          <span>100%</span>
+          <span>{Math.round(zoomLevel * 100)}%</span>
+          <span>200%</span>
+        </div>
+        
+        <div style={{ width: '100%', maxWidth: '400px', display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <Icons.ZoomIn />
+          <input 
+            type="range" 
+            min="1" 
+            max="2" 
+            step="0.01" 
+            value={zoomLevel} 
+            onChange={handleZoomChange}
+            aria-label="Zoom Image"
+          />
+        </div>
+        
+        {zoomLevel > 1 && (
+          <div style={{ color: 'white', fontSize: '0.8rem', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', opacity: 0.8 }}>
+             <Icons.Move /> Drag to pan
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const CommunityPage = () => {
   const content = useContent();
   const page = content.communityPage;
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (previewImage) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [previewImage]);
 
   return (
     <div className="app-page-offset" style={{ backgroundColor: COLORS.offWhite, minHeight: '100vh' }}>
@@ -1260,63 +1507,12 @@ const CommunityPage = () => {
         </div>
       </div>
 
-      {/* Image Preview Modal */}
+      {/* Enhanced Image Preview Modal */}
       {previewImage && (
-        <div 
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(19, 41, 75, 0.95)',
-            zIndex: 3000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px',
-            backdropFilter: 'blur(5px)'
-          }}
-          onClick={() => setPreviewImage(null)}
-        >
-          <button 
-            onClick={() => setPreviewImage(null)}
-            style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
-              background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: '50%',
-              width: '44px',
-              height: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              cursor: 'pointer',
-              zIndex: 3001,
-              transition: 'background 0.2s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-          >
-            <Icons.X />
-          </button>
-
-          <img 
-            src={previewImage} 
-            alt="Full Preview" 
-            style={{
-              maxWidth: '100%',
-              maxHeight: '90vh',
-              objectFit: 'contain',
-              borderRadius: '8px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
+        <ImagePreviewModal 
+          imageUrl={previewImage} 
+          onClose={() => setPreviewImage(null)} 
+        />
       )}
     </div>
   );
