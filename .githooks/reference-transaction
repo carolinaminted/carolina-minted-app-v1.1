@@ -1,0 +1,27 @@
+#!/bin/sh
+set -eu
+
+hook_state="$1"
+
+if [ "$hook_state" != "prepared" ]; then
+  exit 0
+fi
+
+while read -r old_oid new_oid ref_name; do
+  case "$ref_name" in
+    refs/heads/main | refs/heads/develop)
+      [ "$old_oid" = "$new_oid" ] && continue
+      branch=${ref_name#refs/heads/}
+      remote_oid=$(git rev-parse --verify "refs/remotes/origin/$branch" 2>/dev/null || true)
+      if [ "$new_oid" != "$remote_oid" ]; then
+        printf '%s\n' "Branch policy: '$branch' may only synchronize to origin/$branch; use a PR for changes." >&2
+        exit 1
+      fi
+      zero_oid=0000000000000000000000000000000000000000
+      if [ "$old_oid" != "$zero_oid" ] && ! git merge-base --is-ancestor "$old_oid" "$new_oid"; then
+        printf '%s\n' "Branch policy: '$branch' synchronization must be a fast-forward." >&2
+        exit 1
+      fi
+      ;;
+  esac
+done
