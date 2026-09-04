@@ -1,0 +1,14 @@
+# Explicit release inputs only.
+**
+!Dockerfile
+!.dockerignore
+!nginx.conf.template
+!package.json
+!package-lock.json
+!index.html
+!index.tsx
+!collector-home.tsx
+!collector-home.css
+!en.json
+!tsconfig.json
+!vite.config.ts
