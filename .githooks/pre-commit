@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+
+hook_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+. "$hook_dir/branch-policy.sh"
+
+branch_policy_require_work_branch "commit"

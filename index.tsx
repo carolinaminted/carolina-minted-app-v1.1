@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, createContext, useContext, useRef } from "react";
 import { createRoot } from "react-dom/client";
+import siteContent from './en.json';
+import { CollectorHeader, CollectorHome, CollectorFooter } from './collector-home';
 
 // --- Types & Interfaces ---
 
@@ -127,7 +129,7 @@ interface CommunityPageContent {
   feed: SocialPost[];
 }
 
-interface AppContent {
+export interface AppContent {
   common: {
     brandName: string;
     brandSuffix: string;
@@ -1757,21 +1759,9 @@ const ContactPage = () => {
 // --- Main App Component ---
 
 const App = () => {
-  const [content, setContent] = useState<AppContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const content: AppContent = siteContent;
   const [currentPage, setCurrentPage] = useState('home');
 
-  useEffect(() => {
-    fetch('./en.json')
-      .then(res => res.json())
-      .then(data => {
-        setContent(data);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        console.error("Failed to load language file", err);
-      });
-  }, []);
 
   // Use useLayoutEffect to ensure scroll happens before paint
   useLayoutEffect(() => {
@@ -1786,15 +1776,6 @@ const App = () => {
     window.scrollTo(0, 0);
   };
 
-  if (isLoading || !content) {
-    return (
-      <div className="loading-container">
-        <style>{styles.global}</style>
-        <div className="spinner"></div>
-        <p>Loading Experience...</p>
-      </div>
-    );
-  }
 
   const renderPage = () => {
     switch (currentPage) {
@@ -1809,16 +1790,7 @@ const App = () => {
       case 'home':
       default:
         return (
-          <>
-            <Hero 
-              onCommunityClick={() => handleNavigation('community')}
-            />
-            <Features />
-            <EthosSection />
-            <ExpertiseSection />
-            <RecentEventsSection />
-            <ValuesSection />
-          </>
+          <CollectorHome content={content} onNavigate={handleNavigation} />
         );
     }
   };
@@ -1826,11 +1798,11 @@ const App = () => {
   return (
     <ContentContext.Provider value={content}>
       <style>{styles.global}</style>
-      <Header onNavigate={handleNavigation} />
+      <CollectorHeader page={currentPage} onNavigate={handleNavigation} />
       <main>
         {renderPage()}
       </main>
-      {/* Footer removed globally */}
+      <CollectorFooter onNavigate={handleNavigation} />
     </ContentContext.Provider>
   );
 };
