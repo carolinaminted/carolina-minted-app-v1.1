@@ -1,20 +1,28 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Carolina Minted Collectibles
 
-# Run and deploy your AI Studio app
+React, TypeScript and Vite website for Carolina Minted Collectibles. Cloud Run
+serves the compiled static site through Nginx.
 
-This contains everything you need to run your app locally.
+- Production: https://cmc.carolinaminted.net
+- [Local development and testing](docs/local-development.md)
+- [Branching and release gates](docs/release-workflow.md)
+- [Cloud Run deployment and rollback](docs/cloud-run.md)
+- [First production release](docs/releases/2026-09-04.md)
 
-View your app in AI Studio: https://ai.studio/apps/drive/1tiKSHcKUnUz6jKsFruTpgsw4J6ORcuE3
+## Quick start
 
-## Run Locally
+Use Node.js 24 (verified locally with 24.20.0) and npm 11.
 
-**Prerequisites:**  Node.js
+```sh
+git config --local core.hooksPath .githooks
+npm ci
+npm run dev -- --host 127.0.0.1
+```
 
+Open http://localhost:3000. No API key or Google Cloud credentials are needed
+locally. The contact form does not deliver messages. Images and fonts require
+an internet connection.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Source belongs to this repository. In the CMC studio it is checked out at
+`websites/carolina-minted-app-v1.1/`; the parent repository ignores this checkout.
+Future websites receive separate repositories and entries in the studio index.

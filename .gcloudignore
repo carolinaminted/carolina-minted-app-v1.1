@@ -1,0 +1,15 @@
+# Keep source uploads limited to reviewed build inputs, including untracked POC files.
+*
+!Dockerfile
+!.dockerignore
+!.gcloudignore
+!nginx.conf.template
+!package.json
+!package-lock.json
+!index.html
+!index.tsx
+!collector-home.tsx
+!collector-home.css
+!en.json
+!tsconfig.json
+!vite.config.ts

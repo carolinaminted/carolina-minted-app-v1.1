@@ -1,0 +1,68 @@
+name: Website CI
+
+on:
+  push:
+  pull_request:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: node scripts/test-branch-policy.mjs
+      - run: npm ci
+      - run: npx --no-install tsc --noEmit
+      - run: npm run build
+
+  container-smoke:
+    name: container-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+      - run: docker build -t cmc-test .
+      - run: docker run -d --name cmc-test -p 127.0.0.1:8080:8080 -e PORT=8080 cmc-test
+      - name: Wait for container
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8080/health; then exit 0; fi
+            sleep 1
+          done
+          docker logs cmc-test
+          exit 1
+      - run: node scripts/smoke-test.mjs http://127.0.0.1:8080
+      - if: always()
+        run: docker logs cmc-test; docker rm -f cmc-test
+
+  release-source:
+    name: release-source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require develop for production release PRs
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_BRANCH: ${{ github.base_ref }}
+          HEAD_BRANCH: ${{ github.head_ref }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ "$EVENT_NAME" = pull_request ] && [ "$BASE_BRANCH" = main ]; then
+            test "$HEAD_BRANCH" = develop && test "$HEAD_REPOSITORY" = "$REPOSITORY"
+          fi
